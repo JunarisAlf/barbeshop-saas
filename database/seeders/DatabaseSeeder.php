@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\SuperUser;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,11 +14,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+       SuperUser::create([
+            'name'      => 'Junaris A',
+            'email'     => 'junaris0715@gmail.com',
+            'wa_number' => '+6282284393018',
+            'password'  => 'admin123'
+       ]);
     }
 }

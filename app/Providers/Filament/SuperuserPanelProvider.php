@@ -18,24 +18,23 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class SuperuserPanelProvider extends PanelProvider
+class SuperUserPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('superuser')
-            ->path('superuser')
-            ->login()
+            ->id('superUser')
+            ->path('super-user')
+            ->login()->authGuard('superadmin')
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverResources(in: app_path('Filament/SuperUser/Resources'), for: 'App\\Filament\\SuperUser\\Resources')
+            ->discoverPages(in: app_path('Filament/SuperUser/Pages'), for: 'App\\Filament\\SuperUser\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Filament/SuperUser/Widgets'), for: 'App\\Filament\\SuperUser\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
@@ -53,6 +52,7 @@ class SuperuserPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->spa();;
     }
 }
