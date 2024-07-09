@@ -21,5 +21,8 @@ class DatabaseSeeder extends Seeder
             'wa_number' => '+6282284393018',
             'password'  => 'admin123'
        ]);
+       $this->call([
+            BarbershopSeeder::class
+       ]);
     }
 }
