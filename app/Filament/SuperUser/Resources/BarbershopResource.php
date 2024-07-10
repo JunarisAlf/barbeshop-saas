@@ -9,10 +9,12 @@ use App\Models\Barbershop;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Resources;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Livewire\Component;
 
 class BarbershopResource extends Resource
 {
@@ -79,18 +81,37 @@ class BarbershopResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make()->native(false),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-               
+                Tables\Actions\EditAction::make()
+                    ->form([
+                        Forms\Components\TextInput::make('name'),
+                        Forms\Components\TextInput::make('address'),
+                        Forms\Components\TextInput::make('gmaps_url')->label('Google Map URL'),
+                        Forms\Components\TextInput::make('geo_location')
+                            ->label('Current Location')
+                            ->suffixAction(
+                                Forms\Components\Actions\Action::make('get_current_location')
+                                    ->label('Get Current Location')
+                                    ->badge()
+                                    ->action(function (Component $livewire) {
+                                        $livewire->js('console.log("action clicked")');
+                                    })
+                            ),
+                        Forms\Components\Hidden::make('latitude'),
+                        Forms\Components\Hidden::make('longtitude'),
+                    ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }
+
 
     public static function getRelations(): array
     {
@@ -104,5 +125,12 @@ class BarbershopResource extends Resource
         return [
             'index' => Pages\ListBarbershops::route('/'),
         ];
+    }
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

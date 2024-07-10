@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('longitude', total: 9, places: 6)->nullable();
             $table->dateTime('expired_date');
             $table->string('status');
+            $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });
     }
