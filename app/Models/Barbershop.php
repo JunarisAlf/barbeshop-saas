@@ -27,4 +27,5 @@ class Barbershop extends Model
             get: fn() => Carbon::parse($this->expired_date)->diffForHumans() 
         );
     }
+    
 }

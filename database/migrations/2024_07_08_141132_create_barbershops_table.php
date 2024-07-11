@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('gmaps_url')->nullable();
-            $table->decimal('latitude', total: 9, places: 6)->nullable();
-            $table->decimal('longitude', total: 9, places: 6)->nullable();
             $table->dateTime('expired_date');
             $table->string('status');
             $table->timestamp('deleted_at')->nullable();

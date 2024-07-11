@@ -6,12 +6,14 @@ use App\Enums\BarbershopStatusEnum;
 use App\Filament\SuperUser\Resources\BarbershopResource\Pages;
 use App\Filament\SuperUser\Resources\BarbershopResource\RelationManagers;
 use App\Models\Barbershop;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Resources;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Widgets\StatsOverviewWidget;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Livewire\Component;
@@ -22,33 +24,11 @@ class BarbershopResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('address')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('gmaps_url')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('latitude')
-                    ->numeric(),
-                Forms\Components\TextInput::make('longitude')
-                    ->numeric(),
-                Forms\Components\DateTimePicker::make('expired_date')
-                    ->required(),
-                Forms\Components\TextInput::make('status')
-                    ->required()
-                    ->maxLength(255),
-            ]);
-    }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->orderBy('created_at', 'DESC'))
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
@@ -65,16 +45,15 @@ class BarbershopResource extends Resource
                     ->alignCenter(),
                 Tables\Columns\TextColumn::make('expired_date')
                     ->label('Valid Until')
-                    ->dateTime('d/m/Y')
+                    ->date('d/m/Y')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('countDown'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn ($state): string => BarbershopStatusEnum::from($state)->getColor()),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->dateTime('d/m/Y H:i')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
@@ -89,18 +68,6 @@ class BarbershopResource extends Resource
                         Forms\Components\TextInput::make('name'),
                         Forms\Components\TextInput::make('address'),
                         Forms\Components\TextInput::make('gmaps_url')->label('Google Map URL'),
-                        Forms\Components\TextInput::make('geo_location')
-                            ->label('Current Location')
-                            ->suffixAction(
-                                Forms\Components\Actions\Action::make('get_current_location')
-                                    ->label('Get Current Location')
-                                    ->badge()
-                                    ->action(function (Component $livewire) {
-                                        $livewire->js('console.log("action clicked")');
-                                    })
-                            ),
-                        Forms\Components\Hidden::make('latitude'),
-                        Forms\Components\Hidden::make('longtitude'),
                     ])
             ])
             ->bulkActions([
@@ -111,7 +78,6 @@ class BarbershopResource extends Resource
                 ]),
             ]);
     }
-
 
     public static function getRelations(): array
     {

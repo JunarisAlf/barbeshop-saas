@@ -7,7 +7,9 @@ use App\Filament\SuperUser\Resources\BarbershopResource;
 use App\Models\Barbershop;
 use Filament\Actions;
 use Filament\Resources;
+use Filament\Forms;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Widgets\StatsOverviewWidget;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListBarbershops extends ListRecords
@@ -17,9 +19,20 @@ class ListBarbershops extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make('create')
+                ->form([
+                    Forms\Components\TextInput::make('name'),
+                    Forms\Components\TextInput::make('address'),
+                    Forms\Components\TextInput::make('gmaps_url')->label('Google Map URL')
+                ])
+                ->mutateFormDataUsing(function (array $data): array {
+                    $data['expired_date'] = now();
+                    $data['status'] = BarbershopStatusEnum::PENDING;
+                    return $data;
+                })
         ];
     }
+  
     public function getTabs(): array
     {
         return [
