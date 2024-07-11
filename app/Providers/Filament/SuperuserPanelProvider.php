@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\SuperUser\Resources\BarbershopResource\Widgets\BarbershopStatsOverview;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -36,8 +37,7 @@ class SuperUserPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/SuperUser/Widgets'), for: 'App\\Filament\\SuperUser\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                BarbershopStatsOverview::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -53,6 +53,7 @@ class SuperUserPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->spa();;
+            ->sidebarCollapsibleOnDesktop()
+            ->spa();
     }
 }
