@@ -12,6 +12,10 @@ class Barbershop extends Model
 {
     use SoftDeletes;
     use HasFactory;
+
+    public function payments(){
+        return $this->hasMany(Payment::class);
+    }
     protected function coordinate(): Attribute{
         return Attribute::make(
             get: function(): string {
