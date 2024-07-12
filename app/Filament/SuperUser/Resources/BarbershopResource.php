@@ -63,12 +63,22 @@ class BarbershopResource extends Resource
                 Tables\Filters\TrashedFilter::make()->native(false),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->form([
-                        Forms\Components\TextInput::make('name'),
-                        Forms\Components\TextInput::make('address'),
-                        Forms\Components\TextInput::make('gmaps_url')->label('Google Map URL'),
-                    ])
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make()
+                        ->color('warning')
+                        ->form([
+                            Forms\Components\TextInput::make('name'),
+                            Forms\Components\TextInput::make('address'),
+                            Forms\Components\TextInput::make('gmaps_url')->label('Google Map URL'),
+                        ]),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\RestoreAction::make(),
+                    Tables\Actions\Action::make('add_payment')
+                        ->label('Add Payment')->icon('heroicon-o-currency-dollar')->color('info')
+                        ->form([
+                           
+                        ])
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
