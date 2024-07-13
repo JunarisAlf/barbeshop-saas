@@ -4,19 +4,18 @@ namespace App\Filament\SuperUser\Resources;
 
 use App\Enums\BarbershopStatusEnum;
 use App\Filament\SuperUser\Resources\BarbershopResource\Pages;
-use App\Filament\SuperUser\Resources\BarbershopResource\RelationManagers;
 use App\Models\Barbershop;
-use Filament\Actions;
+use App\Models\Payment;
+use Exception;
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
-use Filament\Resources;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Widgets\StatsOverviewWidget;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class BarbershopResource extends Resource
 {
@@ -76,8 +75,41 @@ class BarbershopResource extends Resource
                     Tables\Actions\Action::make('add_payment')
                         ->label('Add Payment')->icon('heroicon-o-currency-dollar')->color('info')
                         ->form([
-                           
+                            Forms\Components\Grid::make()
+                                ->schema([
+                                    Forms\Components\TextInput::make('payer_name')
+                                        ->required()
+                                        ->columnSpan(1),
+                                    Forms\Components\TextInput::make('amount')
+                                        ->required()
+                                        ->columns(2)
+                                        ->prefix('Rp.')
+                                        ->mask(RawJs::make(<<<'JS'
+                                            $money($input, ',', '.')
+                                        JS))
+                                        ->stripCharacters('.')
+                                ]),
+                            Forms\Components\Grid::make()
+                                ->schema([
+                                    Forms\Components\TextInput::make('days_added')->required()->numeric(),
+                                    Forms\Components\TextInput::make('note'),
+                                ]),
+                            Forms\Components\FileUpload::make('payment_image')
+                                ->image()
+                                ->maxSize(1024)
+                                ->visibility('private')
+                                ->disk('local')
+                                ->directory('payment_image'),
                         ])
+                        ->action(function(Barbershop $barbershop, array $data){
+                            try{
+                                $data['user_id'] = Auth::user()->id;
+                                $barbershop->payments()->create($data);
+                                Notification::make()->title('Saved successfully')->success()->send();
+                            }catch(Exception $e){
+                                Notification::make()->title('Save Failed! ' . $e->getMessage())->danger()->send();
+                            }
+                        })
                 ])
             ])
             ->bulkActions([
