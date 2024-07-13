@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\BarbershopStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('gmaps_url')->nullable();
             $table->dateTime('expired_date');
-            $table->string('status');
+            $table->enum('status', BarbershopStatusEnum::values());
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });

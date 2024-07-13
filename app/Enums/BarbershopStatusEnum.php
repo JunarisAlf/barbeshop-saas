@@ -2,12 +2,17 @@
 
 namespace App\Enums;
 
-enum BarbershopStatusEnum: string {
+use App\Trait\EnumToArray;
+
+enum BarbershopStatusEnum: string
+{
+    use EnumToArray;
     case ACTIVE  = 'active';
     case PENDING = 'pending';
     case EXPIRED = 'expired';
 
-    public function getColor(): string {
+    public function getColor(): string
+    {
         return  match ($this) {
             self::ACTIVE    => 'success',
             self::PENDING   => 'gray',
@@ -15,4 +20,5 @@ enum BarbershopStatusEnum: string {
             default         => 'black'
         };
     }
+    
 }
