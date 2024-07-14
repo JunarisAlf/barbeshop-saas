@@ -21,9 +21,9 @@ class ListBarbershops extends ListRecords
         return [
             Actions\CreateAction::make('create')
                 ->form([
-                    Forms\Components\TextInput::make('name'),
-                    Forms\Components\TextInput::make('address'),
-                    Forms\Components\TextInput::make('gmaps_url')->label('Google Map URL')
+                    Forms\Components\TextInput::make('name')->required(),
+                    Forms\Components\TextInput::make('address')->required(),
+                    Forms\Components\TextInput::make('gmaps_url')->label('Google Map URL')->activeUrl()
                 ])
                 ->mutateFormDataUsing(function (array $data): array {
                     $data['expired_date'] = now();
