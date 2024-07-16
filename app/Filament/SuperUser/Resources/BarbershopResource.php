@@ -12,6 +12,9 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Support\RawJs;
 use Filament\Tables;
+use Filament\Infolists;
+use Filament\Support\Colors\Color;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -109,7 +112,38 @@ class BarbershopResource extends Resource
                             }catch(Exception $e){
                                 Notification::make()->title('Save Failed! ' . $e->getMessage())->danger()->send();
                             }
-                        })
+                        }),
+                    Tables\Actions\Action::make('see_payments')
+                        ->label('Payment Histories')->icon('heroicon-m-list-bullet')->color('success')
+                        ->slideOver()->modalWidth(MaxWidth::SevenExtraLarge)
+                        ->infolist([
+                            Infolists\Components\RepeatableEntry::make('payments')
+                                ->state(fn(Barbershop $barbershop) => $barbershop->payments()->with('user')->orderBy('created_at', 'DESC')->get())
+                                ->hiddenLabel(true)
+                                ->schema([
+                                    Infolists\Components\Grid::make([
+                                        'default' => 1, 'sm' => 2, 'md' => 3, 'lg' => 4, 'xl' => 6,
+                                    ])
+                                    ->schema([
+                                        Infolists\Components\TextEntry::make('payer_name')
+                                            ->label('Payer Name'),
+                                        Infolists\Components\TextEntry::make('amount')
+                                            ->label('Amount (Rp.)')
+                                            ->state(fn(Payment $payment) => number_format($payment->amount, 0, ',', '.')),
+                                        Infolists\Components\TextEntry::make('days_added')
+                                            ->label('Days Added'),
+                                        Infolists\Components\TextEntry::make('user')
+                                            ->state(fn(Payment $payment) => $payment->user->name),
+                                        Infolists\Components\TextEntry::make('note'),
+                                        Infolists\Components\TextEntry::make('created_at')
+                                            ->label('Created At')
+                                            ->state(fn(Payment $payment) => $payment->created_at->format('d/m/Y H:i:s')),
+                                    ])
+                                ])
+                            
+                        ])
+                        ->modalSubmitAction(false)
+
                 ])
             ])
             ->bulkActions([
