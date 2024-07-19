@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->foreignId('barbershop_id')->references('id')->on('barbershops')->cascadeOnDelete()->cascadeOnUpdate();
             $table->rememberToken();
+            $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });
     }

@@ -7,15 +7,20 @@ namespace App\Models;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        return $this->deleted_at === null;
+    }
+    public function barbershop(): BelongsTo{
+        return $this->belongsTo(Barbershop::class);
     }
     /**
      * The attributes that are mass assignable.
