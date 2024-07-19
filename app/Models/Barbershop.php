@@ -17,6 +17,9 @@ class Barbershop extends Model
     public function payments(): HasMany{
         return $this->hasMany(Payment::class);
     }
+    public function users(): HasMany{
+        return $this->hasMany(User::class);
+    }
     protected function coordinate(): Attribute{
         return Attribute::make(
             get: function(): string {
