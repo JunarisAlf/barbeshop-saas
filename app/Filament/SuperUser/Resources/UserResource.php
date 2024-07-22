@@ -5,8 +5,10 @@ namespace App\Filament\SuperUser\Resources;
 use App\Filament\SuperUser\Resources\UserResource\Pages;
 use App\Filament\SuperUser\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use Exception;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -51,6 +53,31 @@ class UserResource extends Resource
                                 })
                                 ->dehydrateStateUsing(fn (string $state): string => "628" . $state),
                         ]),
+                    Tables\Actions\Action::make('change_password')
+                        ->label('Change Password')->icon('heroicon-s-key')->color('info')
+                        ->form([
+                            Forms\Components\TextInput::make('password')
+                                ->label('New Password')
+                                ->required()
+                                ->minLength(6)
+                                ->password()->revealable()
+                                ->rules(['confirmed']),
+                            Forms\Components\TextInput::make('password_confirmation')
+                                ->label('Password Confirmation')
+                                ->required()
+                                ->password()->revealable()
+                                ->minLength(6),
+                        ])
+                        ->action(function(User $user, array $data){
+                            try{
+                                $user->password         = $data['password'];
+                                $user->remember_token   = NULL;
+                                $user->save();
+                                Notification::make()->title('Change Password successfully')->success()->send();
+                            }catch(Exception $e){
+                                Notification::make()->title('Change Password Failed! ' . $e->getMessage())->danger()->send();
+                            }
+                        }),
                     Tables\Actions\DeleteAction::make(),
                     Tables\Actions\RestoreAction::make(),
                 ])
