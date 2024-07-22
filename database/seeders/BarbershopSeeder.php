@@ -15,10 +15,15 @@ class BarbershopSeeder extends Seeder
      */
     public function run(): void
     {
+        $paymentDispatchers = Payment::getEventDispatcher();
+        Payment::unsetEventDispatcher();
+
         Barbershop
             ::factory()->count(200)
-            ->has(Payment::factory()->count(2), 'payments')
+            ->has(Payment::factory()->count(2))
             ->has(User::factory()->count(2), 'users')
             ->create();
+        
+        Payment::setEventDispatcher($paymentDispatchers);
     }
 }
