@@ -33,7 +33,24 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make()->color('warning'),
+                    Tables\Actions\EditAction::make()
+                        ->color('warning')
+                        ->form([
+                            Forms\Components\TextInput::make('name')
+                                ->required(),
+                            Forms\Components\TextInput::make('email')
+                                ->required()
+                                ->email()
+                                ->unique(ignoreRecord: true),
+                            Forms\Components\TextInput::make('wa_number')
+                                ->label('WA')
+                                ->required()
+                                ->prefix('+628')
+                                ->afterStateHydrated(function (Forms\Components\TextInput $component, string $state) {
+                                    $component->state(substr($state, 3));
+                                })
+                                ->dehydrateStateUsing(fn (string $state): string => "628" . $state),
+                        ]),
                     Tables\Actions\DeleteAction::make(),
                     Tables\Actions\RestoreAction::make(),
                 ])
