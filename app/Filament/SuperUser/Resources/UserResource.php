@@ -24,6 +24,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->orderBy('created_at', 'DESC'))
             ->groups([Tables\Grouping\Group::make('barbershop.name')->collapsible()])
             ->columns([
                 Tables\Columns\TextColumn::make('name')->searchable(),
