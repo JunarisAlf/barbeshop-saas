@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\SuperUser\Resources\UserResource\Pages;
+namespace App\Filament\User\Resources\UserResource\Pages;
 
-use App\Filament\SuperUser\Resources\UserResource;
+use App\Filament\User\Resources\UserResource;
 use App\Models\Barbershop;
 use Filament\Actions;
 use Filament\Forms;
@@ -17,12 +17,6 @@ class ManageUsers extends ManageRecords
         return [
             Actions\CreateAction::make()
                 ->form([
-                    Forms\Components\Select::make('barbershop_id')
-                        ->options(Barbershop::all()->pluck('name', 'id'))
-                        ->searchable()
-                        ->label('Barbershop')
-                        ->native(false)
-                        ->required(),
                     Forms\Components\TextInput::make('name')->required(),
                     Forms\Components\TextInput::make('email')
                         ->required()
