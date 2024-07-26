@@ -9,7 +9,7 @@ class UserObserver
 {
     public function creating(User $user): void
     {
-        if(Auth::guard()->name == 'admin'){
+        if(Auth::check() && Auth::guard()->name == 'admin'){
             $user->barbershop_id = Auth::user()->barbershop_id;
         }
     }

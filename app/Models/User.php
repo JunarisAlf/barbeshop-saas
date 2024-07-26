@@ -10,6 +10,8 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -22,8 +24,20 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->deleted_at === null;
     }
-    public function barbershop(): BelongsTo{
+
+    public function barbershop(): BelongsTo
+    {
         return $this->belongsTo(Barbershop::class);
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->BelongsToMany(Role::class);
+    }
+
+    public function permissions()
+    {
+        return $this->hasManyThrough(Permission::class, Role::class);
     }
     /**
      * The attributes that are mass assignable.

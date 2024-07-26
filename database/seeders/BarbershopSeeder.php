@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\BarbershopStatusEnum;
 use App\Models\Barbershop;
 use App\Models\Payment;
 use App\Models\User;
@@ -15,15 +16,31 @@ class BarbershopSeeder extends Seeder
      */
     public function run(): void
     {
-        $paymentDispatchers = Payment::getEventDispatcher();
-        Payment::unsetEventDispatcher();
+        $barbershop = Barbershop::create( [
+            'name'          => 'Barberhsop Pertama',
+            'address'       => 'Jl. Merpati No. 84, Taluk Kuantan',
+            'expired_date'  => now()->addDays(30)->format('Y-m-d H:i:s'),
+            'gmaps_url'     => 'https://maps.app.goo.gl/TQXLewgiL3Gd5yP68',
+            'status'        => BarbershopStatusEnum::ACTIVE
+        ]);
+        $user = $barbershop->users()->create([
+            'id'                => 1,
+            'name'              => 'Fulan bin Fulan',
+            'email'             => 'fulan@gmail.com',
+            'wa_number'         => fake()->numerify('628##########'),
+            'password'          => 'password'
+        ]);
 
-        Barbershop
-            ::factory()->count(200)
-            ->has(Payment::factory()->count(2))
-            ->has(User::factory()->count(2), 'users')
-            ->create();
+
+        // $paymentDispatchers = Payment::getEventDispatcher();
+        // Payment::unsetEventDispatcher();
+
+        // Barbershop
+        //     ::factory()->count(200)
+        //     ->has(Payment::factory()->count(2))
+        //     ->has(User::factory()->count(2), 'users')
+        //     ->create();
         
-        Payment::setEventDispatcher($paymentDispatchers);
+        // Payment::setEventDispatcher($paymentDispatchers);
     }
 }

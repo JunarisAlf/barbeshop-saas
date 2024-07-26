@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Barbershop;
 use App\Models\SuperUser;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -21,8 +22,10 @@ class DatabaseSeeder extends Seeder
             'wa_number' => '+6282284393018',
             'password'  => 'admin123'
        ]);
+       
        $this->call([
-            BarbershopSeeder::class
+            BarbershopSeeder::class,
+            PermissionSeeder::class
        ]);
     }
 }
