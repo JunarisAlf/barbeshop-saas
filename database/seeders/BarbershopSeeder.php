@@ -17,6 +17,7 @@ class BarbershopSeeder extends Seeder
     public function run(): void
     {
         $barbershop = Barbershop::create( [
+            'id'            => 1,
             'name'          => 'Barberhsop Pertama',
             'address'       => 'Jl. Merpati No. 84, Taluk Kuantan',
             'expired_date'  => now()->addDays(30)->format('Y-m-d H:i:s'),
@@ -28,7 +29,8 @@ class BarbershopSeeder extends Seeder
             'name'              => 'Fulan bin Fulan',
             'email'             => 'fulan@gmail.com',
             'wa_number'         => fake()->numerify('628##########'),
-            'password'          => 'password'
+            'password'          => 'password',
+            'is_owner'          => true
         ]);
 
 

@@ -40,14 +40,10 @@ class PermissionSeeder extends Seeder
             new Permission(['name' => 'forceDeletePayment', 'display' => 'Menghapus Permanen Data Pembayaran']),
         ]);
 
-        $ownerRole      = Role::create(['name' => 'Owner']);
+        $ownerRole      = Role::create(['name' => 'Owner', 'barbershop_id' => 1]);
         $ownerRole->users()->attach(1); // user with id 1 made at Barbershop Seeder
         $ownerRole->permissions()->attach($userResource->permissions()->pluck('id'));
         $ownerRole->permissions()->attach($paymentResource->permissions()->pluck('id'));
-
-        $cashierRole    = Role::create(['name' => 'Kasir']);
-        $barberRole     = Role::create(['name' => 'Barber']);
-
 
     }
 }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('wa_number')->unique();
             $table->string('password');
             $table->foreignId('barbershop_id')->references('id')->on('barbershops')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->boolean('is_owner')->default(false);
             $table->rememberToken();
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
