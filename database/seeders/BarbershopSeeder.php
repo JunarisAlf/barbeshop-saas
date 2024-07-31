@@ -33,7 +33,7 @@ class BarbershopSeeder extends Seeder
             'is_owner'          => true
         ]);
 
-
+        $user->roles()->attach($barbershop->roles()->where('name', 'Owner')->first()->id);
         // $paymentDispatchers = Payment::getEventDispatcher();
         // Payment::unsetEventDispatcher();
 

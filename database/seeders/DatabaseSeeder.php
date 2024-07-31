@@ -24,8 +24,8 @@ class DatabaseSeeder extends Seeder
        ]);
        
        $this->call([
-            BarbershopSeeder::class,
-            PermissionSeeder::class
+           PermissionSeeder::class,
+           BarbershopSeeder::class,
        ]);
     }
 }

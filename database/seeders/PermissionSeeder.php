@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Barbershop;
 use App\Models\Permission;
 use App\Models\Resource;
 use App\Models\Role;
@@ -16,8 +17,6 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        
-
         $userResource = Resource::create(['name' => 'User', 'display' => 'Pengguna']);
         $userResource->permissions()->saveMany([
             new Permission(['name' => 'viewAnyUser', 'display' => 'Lihat List Pengguna']),
@@ -41,10 +40,16 @@ class PermissionSeeder extends Seeder
             new Permission(['name' => 'forceDeletePayment', 'display' => 'Menghapus Permanen Data Pembayaran']),
         ]);
 
-        $ownerRole      = Role::create(['name' => 'Owner', 'barbershop_id' => 1]);
-        $ownerRole->users()->attach(1); // user with id 1 made at Barbershop Seeder
-        $ownerRole->permissions()->attach($userResource->permissions()->pluck('id'));
-        $ownerRole->permissions()->attach($paymentResource->permissions()->pluck('id'));
+        $RoleResource = Resource::create(['name' => 'Role', 'display' => 'Role']);
+        $RoleResource->permissions()->saveMany([
+            new Permission(['name' => 'viewAnyRole', 'display' => 'Lihat List Role']),
+            new Permission(['name' => 'viewRole', 'display' => 'Lihat Detail Role']),
+            new Permission(['name' => 'createRole', 'display' => 'Menambahkan Role Baru']),
+            new Permission(['name' => 'updateRole', 'display' => 'Mengubah Data Role']),
+            new Permission(['name' => 'deleteRole', 'display' => 'Menghapus Data Role']),
+            new Permission(['name' => 'restoreRole', 'display' => 'Mengembalikan Data Role Terhapus']),
+            new Permission(['name' => 'forceDeleteRole', 'display' => 'Menghapus Permanen Data Role']),
+        ]);
 
     }
 }
