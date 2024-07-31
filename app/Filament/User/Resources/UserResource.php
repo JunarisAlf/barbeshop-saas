@@ -26,9 +26,9 @@ class UserResource extends Resource
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->where('barbershop_id', Auth::user()->barbershop_id)->orderBy('created_at', 'DESC'))
             ->columns([
-                Tables\Columns\TextColumn::make('name')->searchable(),
+                Tables\Columns\TextColumn::make('name')->label('Nama')->searchable(),
                 Tables\Columns\TextColumn::make('email')->searchable(),
-                Tables\Columns\TextColumn::make('wa_number')->searchable(),
+                Tables\Columns\TextColumn::make('wa_number')->label('Nomor WA')->searchable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make()->native(false),
@@ -55,6 +55,7 @@ class UserResource extends Resource
                         ]),
                     Tables\Actions\Action::make('change_password')
                         ->label('Change Password')->icon('heroicon-s-key')->color('info')
+                        ->visible(fn(User $user) => Auth::user()->can('changePassword', $user))
                         ->form([
                             Forms\Components\TextInput::make('password')
                                 ->label('New Password')

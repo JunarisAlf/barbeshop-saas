@@ -20,10 +20,12 @@ class ManageUsers extends ManageRecords
                     Forms\Components\TextInput::make('name')->required(),
                     Forms\Components\TextInput::make('email')
                         ->required()
+                        ->default(null)
                         ->email()
                         ->unique(),
                     Forms\Components\TextInput::make('wa_number')
                         ->label('WA')
+                        ->default('1234567890')
                         ->required()
                         ->prefix('+628')
                         ->dehydrateStateUsing(fn (string $state): string => "628" . $state),

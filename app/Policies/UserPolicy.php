@@ -10,19 +10,20 @@ use Illuminate\Support\Facades\Auth;
 
 class UserPolicy
 {
+    public function before(){
+        if (Auth::guard()->name === 'superadmin') {
+            return true;
+        }
+    }
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(): bool
     {
-        if (Auth::guard()->name === 'superadmin') {
+        if (in_array('viewAnyUser', Auth::user()->getArrayOfPermissions())) {
             return true;
-        } else {
-            if (in_array('viewAnyUser', Auth::user()->getArrayOfPermissions())) {
-                return true;
-            }
-            return false;
         }
+        return false;
     }
 
     /**
@@ -30,14 +31,10 @@ class UserPolicy
      */
     public function view($authUser, User $model): bool
     {
-        if (Auth::guard()->name === 'superadmin') {
+        if(in_array('viewUser', Auth::user()->getArrayOfPermissions())){
             return true;
-        }else{
-            if(in_array('viewUser', Auth::user()->getArrayOfPermissions())){
-                return true;
-            }
-            return false;
         }
+        return false;
     }
 
     /**
@@ -45,14 +42,10 @@ class UserPolicy
      */
     public function create($authUser): bool
     {
-        if (Auth::guard()->name === 'superadmin') {
+        if(in_array('createUser', Auth::user()->getArrayOfPermissions())){
             return true;
-        }else{
-            if(in_array('createUser', Auth::user()->getArrayOfPermissions())){
-                return true;
-            }
-            return false;
         }
+        return false;
     }
 
     /**
@@ -60,14 +53,10 @@ class UserPolicy
      */
     public function update($authUser, User $model): bool
     {
-        if (Auth::guard()->name === 'superadmin') {
+        if(in_array('updateUser', Auth::user()->getArrayOfPermissions())){
             return true;
-        }else{
-            if(in_array('updateUser', Auth::user()->getArrayOfPermissions())){
-                return true;
-            }
-            return false;
         }
+        return false;
     }
 
     /**
@@ -75,14 +64,10 @@ class UserPolicy
      */
     public function delete($authUser, User $model): bool
     {
-        if (Auth::guard()->name === 'superadmin') {
+        if(in_array('deleteUser', Auth::user()->getArrayOfPermissions())){
             return true;
-        }else{
-            if(in_array('deleteUser', Auth::user()->getArrayOfPermissions())){
-                return true;
-            }
-            return false;
         }
+        return false;
     }
 
     /**
@@ -90,14 +75,10 @@ class UserPolicy
      */
     public function restore($authUser, User $model): bool
     {
-        if (Auth::guard()->name === 'superadmin') {
+        if(in_array('restoreUser', Auth::user()->getArrayOfPermissions())){
             return true;
-        }else{
-            if(in_array('restoreUser', Auth::user()->getArrayOfPermissions())){
-                return true;
-            }
-            return false;
         }
+        return false;
     }
 
     /**
@@ -105,13 +86,16 @@ class UserPolicy
      */
     public function forceDelete($authUser, User $model): bool
     {
-        if (Auth::guard()->name === 'superadmin') {
+        if(in_array('forceDeleteUser', Auth::user()->getArrayOfPermissions())){
             return true;
-        }else{
-            if(in_array('forceDeleteUser', Auth::user()->getArrayOfPermissions())){
-                return true;
-            }
-            return false;
         }
+        return false;
+    }
+    public function changePassword(): bool
+    {
+        if(in_array('changePassword', Auth::user()->getArrayOfPermissions())){
+            return true;
+        }
+        return false;
     }
 }

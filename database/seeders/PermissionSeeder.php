@@ -27,6 +27,7 @@ class PermissionSeeder extends Seeder
             new Permission(['name' => 'deleteUser', 'display' => 'Menghapus Data Pengguna']),
             new Permission(['name' => 'restoreUser', 'display' => 'Mengembalikan Data Pengguna Terhapus']),
             new Permission(['name' => 'forceDeleteUser', 'display' => 'Menghapus Permanen Data Pengguna']),
+            new Permission(['name' => 'changePassword', 'display' => 'Mengubah Password Semua User']),
         ]);
 
         $paymentResource = Resource::create(['name' => 'Payment', 'display' => 'Pwmbayaran']);
