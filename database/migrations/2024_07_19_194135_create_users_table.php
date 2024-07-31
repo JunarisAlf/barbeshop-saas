@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->foreignId('barbershop_id')->references('id')->on('barbershops')->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean('is_owner')->default(false);
+            $table->boolean('has_full_access')->default(false);
             $table->rememberToken();
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
