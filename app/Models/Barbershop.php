@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Observers\BarbershopObserver;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,31 +47,39 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Barbershop withoutTrashed()
  * @mixin \Eloquent
  */
+#[ObservedBy([BarbershopObserver::class])]
 class Barbershop extends Model
 {
     use SoftDeletes;
     use HasFactory;
 
-    public function payments(): HasMany{
+    public function payments(): HasMany
+    {
         return $this->hasMany(Payment::class);
     }
-    public function users(): HasMany{
+    public function users(): HasMany
+    {
         return $this->hasMany(User::class);
     }
-       protected function coordinate(): Attribute{
+    public function roles(): HasMany
+    {
+        return $this->hasMany(Role::class);
+    }
+    protected function coordinate(): Attribute
+    {
         return Attribute::make(
-            get: function(): string {
-                    if ($this->latitude == null || $this->longtitude == null){
-                        return '-';
-                    }
-                    return "$this->latitude, $this->longtitude";
-                }   
+            get: function (): string {
+                if ($this->latitude == null || $this->longtitude == null) {
+                    return '-';
+                }
+                return "$this->latitude, $this->longtitude";
+            }
         );
     }
-    protected function countDown(): Attribute{
+    protected function countDown(): Attribute
+    {
         return Attribute::make(
-            get: fn() => Carbon::parse($this->expired_date)->diffForHumans() 
+            get: fn () => Carbon::parse($this->expired_date)->diffForHumans()
         );
     }
-    
 }
