@@ -4,8 +4,8 @@ namespace App\Filament\User\Resources;
 
 use App\Filament\User\Resources\RoleResource\Pages;
 use App\Filament\User\Resources\RoleResource\RelationManagers;
+use App\Models\Resource as ModelsResource;
 use App\Models\Role;
-use Auth;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class RoleResource extends Resource
 {
@@ -35,9 +36,36 @@ class RoleResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                ->form([
-                    Forms\Components\TextInput::make('name')->required()
-                ]),
+                    ->form([
+                        Forms\Components\TextInput::make('name')->required(),
+                        Forms\Components\Section::make('Hak Akses')->schema([
+                            Forms\Components\Grid::make()
+                                ->columns([
+                                    'sm'    => 2,
+                                    'lg'    => 4,
+                                ])
+                                ->schema([
+                                    Forms\Components\Section::make([
+                                        Forms\Components\CheckboxList::make('permissions')->label('Pengguna')
+                                            ->options(ModelsResource::where('name', 'User')->first()->permissions->pluck('display', 'id'))
+                                            ->bulkToggleable()
+                                            ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
+                                    ])->columnSpan(2),
+                                    Forms\Components\Section::make([
+                                        Forms\Components\CheckboxList::make('permissions')->label('Role')
+                                            ->options(ModelsResource::where('name', 'Role')->first()->permissions->pluck('display', 'id'))
+                                            ->bulkToggleable()
+                                            ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
+                                    ])->columnSpan(2),
+                                ])
+                            
+                        ]),
+                    ])
+                    ->using(function(Role $role, array $data){
+                        $role->name     = $data['name'];
+                        $role->save();
+                        $role->permissions()->sync($data['permissions']);
+                    }),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
