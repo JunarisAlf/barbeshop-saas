@@ -15,12 +15,11 @@ use Filament\Resources\Pages\ManageRecords;
 class ManageRoles extends ManageRecords
 {
     protected static string $resource = RoleResource::class;
-
+    public $resources;
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()
-
                 ->form([
                     Forms\Components\TextInput::make('name')->required(),
                     Forms\Components\Section::make('Hak Akses')->schema([
@@ -31,7 +30,8 @@ class ManageRoles extends ManageRecords
                             ])
                             ->schema([
                                 Forms\Components\Section::make([
-                                    Forms\Components\CheckboxList::make('permissions')->label('Pengguna')
+                                    Forms\Components\CheckboxList::make('permissions')
+                                        ->label('Pengguna')
                                         ->options(Resource::where('name', 'User')->first()->permissions->pluck('display', 'id'))
                                         ->bulkToggleable()
                                 ])->columnSpan(2),

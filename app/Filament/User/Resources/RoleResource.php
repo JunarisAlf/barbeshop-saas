@@ -24,12 +24,15 @@ class RoleResource extends Resource
 
 
     public static function table(Table $table): Table
-    {
+    {   
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->where('barbershop_id', Auth::user()->barbershop_id)->orderBy('created_at', 'DESC'))
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label('Role'),
                 Tables\Columns\TextColumn::make('users_count')->counts('users')->label('Jumlah User'),
+                Tables\Columns\TextColumn::make('users')
+                    ->label('Daftar Pengguna')
+                    ->badge()->color('info')
+                    ->state(fn(Role $role) => $role->users->pluck('name')),
             ])
             ->filters([
                 //
