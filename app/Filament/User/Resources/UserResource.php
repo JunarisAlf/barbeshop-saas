@@ -4,6 +4,7 @@ namespace App\Filament\User\Resources;
 
 use App\Filament\User\Resources\UserResource\Pages;
 use App\Filament\User\Resources\UserResource\RelationManagers;
+use App\Models\Role;
 use App\Models\User;
 use Exception;
 use Filament\Forms;
@@ -52,6 +53,11 @@ class UserResource extends Resource
                                     $component->state(substr($state, 3));
                                 })
                                 ->dehydrateStateUsing(fn (string $state): string => "628" . $state),
+                            Forms\Components\Select::make('roles')
+                                ->label('Role')
+                                ->native(false)
+                                ->multiple()
+                                ->relationship(name: 'roles', titleAttribute: 'name')
                         ]),
                     Tables\Actions\Action::make('change_password')
                         ->label('Change Password')->icon('heroicon-s-key')->color('info')

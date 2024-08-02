@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('super_users')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId('user_id')->references('id')->on('super_users')->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('barbershop_id')->references('id')->on('barbershops')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('payer_name');
             $table->unsignedInteger('amount');

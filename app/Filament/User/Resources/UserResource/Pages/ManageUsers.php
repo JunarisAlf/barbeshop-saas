@@ -4,6 +4,7 @@ namespace App\Filament\User\Resources\UserResource\Pages;
 
 use App\Filament\User\Resources\UserResource;
 use App\Models\Barbershop;
+use App\Models\Role;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Pages\ManageRecords;
@@ -40,10 +41,17 @@ class ManageUsers extends ManageRecords
                         ->required()
                         ->password()->revealable()
                         ->minLength(6),
+                    Forms\Components\Select::make('roles')
+                        ->label('Role')
+                        ->native(false)
+                        ->multiple()
+                        ->options(Role::pluck('name', 'id'))
                 ])
                 ->using(function (array $data, string $model) {
+                    $roles = $data['roles'];
                     unset($data['password_confirmation']);
-                    return $model::create($data);
+                    unset($data['roles']);
+                    return $model::create($data)->roles()->attach($roles);
                 }),
         ];
     }
