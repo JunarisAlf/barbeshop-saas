@@ -1,7 +1,9 @@
 <?php
 namespace App\Trait;
 
-trait EnumToArray
+use Illuminate\Validation\Rules\Enum;
+
+trait EnumHelper
 {
     public static function names(): array
     {
@@ -20,5 +22,9 @@ trait EnumToArray
     public static function getValueFromName(string $name): string
     {
         return constant(self::class . '::' . $name)->value;
+    }
+    public static function getEnumFromName(string $name): static
+    {
+        return constant(self::class . '::' . $name);
     }
 }

@@ -52,7 +52,7 @@ class BarbershopResource extends Resource
                 Tables\Columns\TextColumn::make('countDown'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->color(fn ($state): string => BarbershopStatusEnum::from($state)->getColor()),
+                    ->color(fn ($state): string => BarbershopStatusEnum::getEnumFromName($state)->getColor()),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),

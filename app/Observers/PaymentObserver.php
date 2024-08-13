@@ -17,7 +17,7 @@ class PaymentObserver implements ShouldHandleEventsAfterCommit
     {
         $payment->refresh(); // need refresh or refacting data
         $barbershop                 = Barbershop::find($payment->barbershop_id);
-        $barbershop->status         = BarbershopStatusEnum::ACTIVE;
+        $barbershop->status         = BarbershopStatusEnum::ACTIVE->name;
         $barbershop->expired_date   = Carbon::now()->addDays($payment->days_added);
         $barbershop->save();
     }

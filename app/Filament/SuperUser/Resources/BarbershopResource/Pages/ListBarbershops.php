@@ -27,7 +27,7 @@ class ListBarbershops extends ListRecords
                 ])
                 ->mutateFormDataUsing(function (array $data): array {
                     $data['expired_date'] = now();
-                    $data['status'] = BarbershopStatusEnum::PENDING;
+                    $data['status'] = BarbershopStatusEnum::PENDING->name;
                     return $data;
                 })
         ];
@@ -39,14 +39,14 @@ class ListBarbershops extends ListRecords
             'all'   => Resources\Components\Tab::make('All Barbershop')
                 ->badge(Barbershop::query()->count()),
             'active'    => Resources\Components\Tab::make('Active')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', BarbershopStatusEnum::ACTIVE))
-                ->badge(Barbershop::query()->where('status', BarbershopStatusEnum::ACTIVE)->count()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', BarbershopStatusEnum::ACTIVE->name))
+                ->badge(Barbershop::query()->where('status', BarbershopStatusEnum::ACTIVE->name)->count()),
             'expired'   => Resources\Components\Tab::make('Expired')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', BarbershopStatusEnum::EXPIRED))
-                ->badge(Barbershop::query()->where('status', BarbershopStatusEnum::EXPIRED)->count()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', BarbershopStatusEnum::EXPIRED->name))
+                ->badge(Barbershop::query()->where('status', BarbershopStatusEnum::EXPIRED->name)->count()),
             'pending'   => Resources\Components\Tab::make('Pending')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', BarbershopStatusEnum::PENDING))
-                ->badge(Barbershop::query()->where('status', BarbershopStatusEnum::PENDING)->count())
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', BarbershopStatusEnum::PENDING->name))
+                ->badge(Barbershop::query()->where('status', BarbershopStatusEnum::PENDING->name)->count())
         ];
     }
 }

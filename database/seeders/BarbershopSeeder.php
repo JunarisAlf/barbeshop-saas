@@ -23,7 +23,7 @@ class BarbershopSeeder extends Seeder
             'address'       => 'Jl. Merpati No. 84, Taluk Kuantan',
             'expired_date'  => now()->addDays(30)->format('Y-m-d H:i:s'),
             'gmaps_url'     => 'https://maps.app.goo.gl/TQXLewgiL3Gd5yP68',
-            'status'        => BarbershopStatusEnum::ACTIVE
+            'status'        => BarbershopStatusEnum::ACTIVE->name
         ]);
         $user = $barbershop->users()->create([
             'id'                => 1,

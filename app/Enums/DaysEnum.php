@@ -2,11 +2,11 @@
 
 namespace App\Enums;
 
-use App\Trait\EnumToArray;
+use App\Trait\EnumHelper;
 
 enum DaysEnum: string
 {
-    use EnumToArray;
+    use EnumHelper;
     case SUNDAY     = 'Minggu';
     case MONDAY     = 'Senin';
     case TUESDAY    = 'Selasa';

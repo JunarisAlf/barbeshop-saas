@@ -22,11 +22,11 @@ class BarbershopStatsOverview extends BaseWidget
                     . " This Month"
                 )
                 ->color('success'),
-            Stat::make('Active', Barbershop::where('status', BarbershopStatusEnum::ACTIVE)->count() )
+            Stat::make('Active', Barbershop::where('status', BarbershopStatusEnum::ACTIVE->name)->count() )
                 ->color('success'),
-            Stat::make('Expired', Barbershop::where('status', BarbershopStatusEnum::EXPIRED)->count() )
+            Stat::make('Expired', Barbershop::where('status', BarbershopStatusEnum::EXPIRED->name)->count() )
                 ->color('danger'),
-            Stat::make('Pending', Barbershop::where('status', BarbershopStatusEnum::PENDING)->count() )
+            Stat::make('Pending', Barbershop::where('status', BarbershopStatusEnum::PENDING->name)->count() )
                 ->color('gray'),
         ];
     }

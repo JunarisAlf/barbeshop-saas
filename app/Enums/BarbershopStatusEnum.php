@@ -2,11 +2,11 @@
 
 namespace App\Enums;
 
-use App\Trait\EnumToArray;
+use App\Trait\EnumHelper;
 
 enum BarbershopStatusEnum: string
 {
-    use EnumToArray;
+    use EnumHelper;
     case ACTIVE  = 'active';
     case PENDING = 'pending';
     case EXPIRED = 'expired';
