@@ -65,6 +65,10 @@ class Barbershop extends Model
     {
         return $this->hasMany(Role::class);
     }
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(Schedule::class);
+    }
     protected function coordinate(): Attribute
     {
         return Attribute::make(

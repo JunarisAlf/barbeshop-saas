@@ -15,6 +15,10 @@ trait EnumToArray
 
     public static function array(): array
     {
-        return array_combine(self::values(), self::names());
+        return array_combine(self::names(), self::values());
+    }
+    public static function getValueFromName(string $name): string
+    {
+        return constant(self::class . '::' . $name)->value;
     }
 }

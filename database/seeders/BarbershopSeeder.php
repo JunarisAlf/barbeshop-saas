@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\BarbershopStatusEnum;
+use App\Enums\DaysEnum;
 use App\Models\Barbershop;
 use App\Models\Payment;
 use App\Models\User;
@@ -34,6 +35,12 @@ class BarbershopSeeder extends Seeder
         ]);
 
         $user->roles()->attach($barbershop->roles()->where('name', 'Owner')->first()->id);
+
+        $barbershop->schedules()->createMany([
+            ['day' => DaysEnum::MONDAY, 'open' => '09:00', 'close' => '12:00'],
+            ['day' => DaysEnum::MONDAY, 'open' => '13:00', 'close' => '20:00'],
+            ['day' => DaysEnum::TUESDAY, 'open' => '09:00', 'close' => '20:00'],
+        ]);
         // $paymentDispatchers = Payment::getEventDispatcher();
         // Payment::unsetEventDispatcher();
 

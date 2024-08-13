@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('gmaps_url')->nullable();
             $table->dateTime('expired_date');
-            $table->enum('status', BarbershopStatusEnum::values());
+            $table->enum('status', BarbershopStatusEnum::names());
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });
