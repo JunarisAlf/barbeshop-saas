@@ -3,7 +3,9 @@
 namespace App\Filament\User\Pages;
 
 use App\Enums\DaysEnum;
+use App\Enums\SeatTypeEnum;
 use App\Models\Schedule;
+use App\Models\Seat;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
@@ -15,6 +17,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Enums\ActionSize;
 use Filament\Support\Enums\FontWeight;
+use Illuminate\Support\Facades\Auth;
 
 class Setting extends Page implements HasForms, HasInfolists
 {
@@ -34,7 +37,8 @@ class Setting extends Page implements HasForms, HasInfolists
     {
         return $infolist
             ->state([
-                'schedules' => Schedule::all()
+                'schedules' => Schedule::all(),
+                'seats'     => Seat::all(),
             ])
             ->schema([
                 Infolists\Components\Grid::make([
@@ -46,6 +50,7 @@ class Setting extends Page implements HasForms, HasInfolists
                     '2xl' => 8,
                 ])
                     ->schema([
+                        // Schedule
                         Infolists\Components\Grid::make()
                             ->schema([
                                 Infolists\Components\RepeatableEntry::make('schedules')
@@ -61,17 +66,20 @@ class Setting extends Page implements HasForms, HasInfolists
                                             ->columnSpan(1)
                                             ->schema([
                                                 Infolists\Components\Actions::make([
-                                                    Infolists\Components\Actions\Action::make('Edit')
+                                                    Infolists\Components\Actions\Action::make('edit_schedule')
                                                         ->iconButton()
                                                         ->icon('heroicon-s-pencil-square')
                                                         ->form([
                                                             Forms\Components\Select::make('day')
                                                                 ->options(DaysEnum::array())
-                                                                ->required(),
-                                                            Forms\Components\TimePicker::make('open')->required(),
-                                                            Forms\Components\TimePicker::make('close')->required(),
+                                                                ->native(false)
+                                                                ->required()
+                                                                ->label('Hari'),
+                                                            Forms\Components\TimePicker::make('open')->required()->label('Buka'),
+                                                            Forms\Components\TimePicker::make('close')->required()->label('Tutup'),
                                                         ])
-                                                        ->fillForm(function(Infolists\Components\Actions\Action $action){
+                                                        ->label('Edit Jadwal')
+                                                        ->fillForm(function (Infolists\Components\Actions\Action $action) {
                                                             $schedule = $action->getComponent()->getRecord();
                                                             return [
                                                                 'day'   => $schedule->day,
@@ -79,25 +87,25 @@ class Setting extends Page implements HasForms, HasInfolists
                                                                 'close' => $schedule->close,
                                                             ];
                                                         })
-                                                        ->action(function(Infolists\Components\Actions\Action $action, array $data){
+                                                        ->action(function (Infolists\Components\Actions\Action $action, array $data) {
                                                             $schedule = $action->getComponent()->getRecord();
                                                             $schedule->fill($data);
-                                                            if($schedule->save()){
+                                                            if ($schedule->save()) {
                                                                 Notification::make()->title('Update successfully')->success()->send();
-                                                            }else{
+                                                            } else {
                                                                 Notification::make()->title('Update failed')->danger()->send();
                                                             }
                                                         }),
-                                                    Infolists\Components\Actions\Action::make('Delete')
+                                                    Infolists\Components\Actions\Action::make('delete_schedule')
                                                         ->iconButton()
                                                         ->color('danger')
                                                         ->icon('heroicon-s-trash')
                                                         ->requiresConfirmation()
-                                                        ->action(function(Infolists\Components\Actions\Action $action){
+                                                        ->action(function (Infolists\Components\Actions\Action $action) {
                                                             $schedule = $action->getComponent()->getRecord();
-                                                            if($schedule->delete()){
+                                                            if ($schedule->delete()) {
                                                                 Notification::make()->title('Deleted successfully')->success()->send();
-                                                            }else{
+                                                            } else {
                                                                 Notification::make()->title('Delete failed')->danger()->send();
                                                             }
                                                         })
@@ -111,11 +119,30 @@ class Setting extends Page implements HasForms, HasInfolists
                                 Infolists\Components\Section::make()
                                     ->schema([
                                         Infolists\Components\Actions::make([
-                                            Infolists\Components\Actions\Action::make('Create')
+                                            Infolists\Components\Actions\Action::make('create_schedule')
                                                 ->iconButton()
                                                 ->color('info')
                                                 ->size(ActionSize::ExtraLarge)
-                                                ->icon('heroicon-c-plus-circle'),
+                                                ->icon('heroicon-c-plus-circle')
+                                                ->form([
+                                                    Forms\Components\Select::make('day')
+                                                        ->options(DaysEnum::array())
+                                                        ->native(false)
+                                                        ->required()
+                                                        ->label('Hari'),
+                                                    Forms\Components\TimePicker::make('open')->required()->label('Buka'),
+                                                    Forms\Components\TimePicker::make('close')->required()->label('Tutup'),
+                                                ])
+                                                ->label('Tambah Jadwal')
+                                                ->action(function (array $data) {
+                                                    $data['barbershop_id']  = Auth::user()->id;
+                                                    $schedule = new Schedule($data);
+                                                    if ($schedule->save()) {
+                                                        Notification::make()->title('Create successfully')->success()->send();
+                                                    } else {
+                                                        Notification::make()->title('Create failed')->danger()->send();
+                                                    }
+                                                }),
                                         ])
                                             ->columnSpanFull()
                                             ->alignCenter()
@@ -126,7 +153,105 @@ class Setting extends Page implements HasForms, HasInfolists
                                     ])
                             ])
                             ->columnSpan(3),
-
+                        // Seat
+                        Infolists\Components\Grid::make()
+                            ->schema([
+                                Infolists\Components\RepeatableEntry::make('seats')
+                                    ->label('Kursi')
+                                    ->schema([
+                                        Infolists\Components\TextEntry::make('name')
+                                            ->hiddenLabel(fn() => true),
+                                        Infolists\Components\TextEntry::make('type')
+                                            ->state(fn(Seat $seat) => SeatTypeEnum::getValueFromName($seat->type))
+                                            ->hiddenLabel(fn() => true),
+                                        Infolists\Components\Grid::make()
+                                            ->columnSpan(1)
+                                            ->schema([
+                                                Infolists\Components\Actions::make([
+                                                    Infolists\Components\Actions\Action::make('edit_seat')
+                                                        ->iconButton()
+                                                        ->icon('heroicon-s-pencil-square')
+                                                        ->form([
+                                                            Forms\Components\Select::make('type')
+                                                                ->options(SeatTypeEnum::array())
+                                                                ->native(false)
+                                                                ->required()
+                                                                ->label('Jenis'),
+                                                            Forms\Components\TextInput::make('name')->required()->label('Nama'),
+                                                        ])
+                                                        ->label('Edit Kursi')
+                                                        ->fillForm(function (Infolists\Components\Actions\Action $action) {
+                                                            $seat = $action->getComponent()->getRecord();
+                                                            return [
+                                                                'name'  => $seat->name,
+                                                                'type'  => $seat->type,
+                                                            ];
+                                                        })
+                                                        ->action(function (Infolists\Components\Actions\Action $action, array $data) {
+                                                            $seat = $action->getComponent()->getRecord();
+                                                            $seat->fill($data);
+                                                            if ($seat->save()) {
+                                                                Notification::make()->title('Update successfully')->success()->send();
+                                                            } else {
+                                                                Notification::make()->title('Update failed')->danger()->send();
+                                                            }
+                                                        }),
+                                                    Infolists\Components\Actions\Action::make('delete_seat')
+                                                        ->iconButton()
+                                                        ->color('danger')
+                                                        ->icon('heroicon-s-trash')
+                                                        ->requiresConfirmation()
+                                                        ->action(function (Infolists\Components\Actions\Action $action) {
+                                                            $seat = $action->getComponent()->getRecord();
+                                                            if ($seat->delete()) {
+                                                                Notification::make()->title('Deleted successfully')->success()->send();
+                                                            } else {
+                                                                Notification::make()->title('Delete failed')->danger()->send();
+                                                            }
+                                                        })
+                                                ])
+                                                    ->columnSpanFull()
+                                                    ->alignEnd()
+                                            ])
+                                    ])
+                                    ->columns(['default' => 3])
+                                    ->columnSpan(3),
+                                Infolists\Components\Section::make()
+                                    ->schema([
+                                        Infolists\Components\Actions::make([
+                                            Infolists\Components\Actions\Action::make('create_seat')
+                                                ->iconButton()
+                                                ->color('info')
+                                                ->size(ActionSize::ExtraLarge)
+                                                ->icon('heroicon-c-plus-circle')
+                                                ->form([
+                                                    Forms\Components\Select::make('type')
+                                                        ->options(SeatTypeEnum::array())
+                                                        ->native(false)
+                                                        ->required()
+                                                        ->label('Jenis'),
+                                                    Forms\Components\TextInput::make('name')->required()->label('Nama'),
+                                                ])
+                                                ->label('Tambah Kursi')
+                                                ->action(function (array $data) {
+                                                    $data['barbershop_id']  = Auth::user()->id;
+                                                    $seat = new Seat($data);
+                                                    if ($seat->save()) {
+                                                        Notification::make()->title('Create successfully')->success()->send();
+                                                    } else {
+                                                        Notification::make()->title('Create failed')->danger()->send();
+                                                    }
+                                                }),
+                                        ])
+                                            ->columnSpanFull()
+                                            ->alignCenter()
+                                    ])
+                                    ->columnSpan(3)
+                                    ->extraAttributes([
+                                        'class' => 'dark:bg-white/5'
+                                    ])
+                            ])
+                            ->columnSpan(3),
                     ])
             ]);
     }

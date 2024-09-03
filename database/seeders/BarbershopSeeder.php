@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\BarbershopStatusEnum;
 use App\Enums\DaysEnum;
+use App\Enums\SeatTypeEnum;
 use App\Models\Barbershop;
 use App\Models\Payment;
 use App\Models\User;
@@ -40,6 +41,11 @@ class BarbershopSeeder extends Seeder
             ['day' => DaysEnum::MONDAY, 'open' => '09:00', 'close' => '12:00'],
             ['day' => DaysEnum::MONDAY, 'open' => '13:00', 'close' => '20:00'],
             ['day' => DaysEnum::TUESDAY, 'open' => '09:00', 'close' => '20:00'],
+        ]);
+        $barbershop->seats()->createMany([
+            ['name' => 'A1', 'type' => SeatTypeEnum::ADULT],
+            ['name' => 'A2', 'type' => SeatTypeEnum::ADULT],
+            ['name' => 'B1', 'type' => SeatTypeEnum::KID],
         ]);
         // $paymentDispatchers = Payment::getEventDispatcher();
         // Payment::unsetEventDispatcher();
