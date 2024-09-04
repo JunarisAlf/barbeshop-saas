@@ -40,8 +40,8 @@ class PermissionSeeder extends Seeder
             new Permission(['name' => 'forceDeletePayment', 'display' => 'Menghapus Permanen Data Pembayaran']),
         ]);
 
-        $RoleResource = Resource::create(['name' => 'Role', 'display' => 'Role']);
-        $RoleResource->permissions()->saveMany([
+        $roleResource = Resource::create(['name' => 'Role', 'display' => 'Role']);
+        $roleResource->permissions()->saveMany([
             new Permission(['name' => 'viewAnyRole', 'display' => 'Lihat List Role']),
             new Permission(['name' => 'viewRole', 'display' => 'Lihat Detail Role']),
             new Permission(['name' => 'createRole', 'display' => 'Menambahkan Role Baru']),
@@ -49,6 +49,39 @@ class PermissionSeeder extends Seeder
             new Permission(['name' => 'deleteRole', 'display' => 'Menghapus Data Role']),
             new Permission(['name' => 'restoreRole', 'display' => 'Mengembalikan Data Role Terhapus']),
             new Permission(['name' => 'forceDeleteRole', 'display' => 'Menghapus Permanen Data Role']),
+        ]);
+
+        $scheduleResource = Resource::create(['name' => 'Schedule', 'display' => 'Jadwal']);
+        $scheduleResource->permissions()->saveMany([
+            new Permission(['name' => 'viewAnySchedule', 'display' => 'Lihat List Jadwal']),
+            new Permission(['name' => 'viewSchedule', 'display' => 'Lihat Detail Jadwal']),
+            new Permission(['name' => 'createSchedule', 'display' => 'Menambahkan Jadwal Baru']),
+            new Permission(['name' => 'updateSchedule', 'display' => 'Mengubah Data Jadwal']),
+            new Permission(['name' => 'deleteSchedule', 'display' => 'Menghapus Data Jadwal']),
+            new Permission(['name' => 'restoreSchedule', 'display' => 'Mengembalikan Data Jadwal Terhapus']),
+            new Permission(['name' => 'forceDeleteSchedule', 'display' => 'Menghapus Permanen Data Jadwal']),
+        ]);
+
+        $seatResource = Resource::create(['name' => 'Seat', 'display' => 'Kursi']);
+        $seatResource->permissions()->saveMany([
+            new Permission(['name' => 'viewAnySeat', 'display' => 'Lihat List Kursi']),
+            new Permission(['name' => 'viewSeat', 'display' => 'Lihat Detail Kursi']),
+            new Permission(['name' => 'createSeat', 'display' => 'Menambahkan Kursi Baru']),
+            new Permission(['name' => 'updateSeat', 'display' => 'Mengubah Data Kursi']),
+            new Permission(['name' => 'deleteSeat', 'display' => 'Menghapus Data Kursi']),
+            new Permission(['name' => 'restoreSeat', 'display' => 'Mengembalikan Data Kursi Terhapus']),
+            new Permission(['name' => 'forceDeleteSeat', 'display' => 'Menghapus Permanen Data Kursi']),
+        ]);
+
+        $employeeResource = Resource::create(['name' => 'Employee', 'display' => 'Pegawai']);
+        $employeeResource->permissions()->saveMany([
+            new Permission(['name' => 'viewAnyEmployee', 'display' => 'Lihat List Pegawai']),
+            new Permission(['name' => 'viewEmployee', 'display' => 'Lihat Detail Pegawai']),
+            new Permission(['name' => 'createEmployee', 'display' => 'Menambahkan Pegawai Baru']),
+            new Permission(['name' => 'updateEmployee', 'display' => 'Mengubah Data Pegawai']),
+            new Permission(['name' => 'deleteEmployee', 'display' => 'Menghapus Data Pegawai']),
+            new Permission(['name' => 'restoreEmployee', 'display' => 'Mengembalikan Data Pegawai Terhapus']),
+            new Permission(['name' => 'forceDeleteEmployee', 'display' => 'Menghapus Permanen Data Pegawai']),
         ]);
 
     }

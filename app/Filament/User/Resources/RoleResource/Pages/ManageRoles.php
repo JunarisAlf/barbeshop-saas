@@ -40,6 +40,21 @@ class ManageRoles extends ManageRecords
                                         ->options(Resource::where('name', 'Role')->first()->permissions->pluck('display', 'id'))
                                         ->bulkToggleable()
                                 ])->columnSpan(2),
+                                Forms\Components\Section::make([
+                                    Forms\Components\CheckboxList::make('permissions')->label('Jadwal')
+                                        ->options(Resource::where('name', 'Schedule')->first()->permissions->pluck('display', 'id'))
+                                        ->bulkToggleable()
+                                ])->columnSpan(2),
+                                Forms\Components\Section::make([
+                                    Forms\Components\CheckboxList::make('permissions')->label('Kursi')
+                                        ->options(Resource::where('name', 'Seat')->first()->permissions->pluck('display', 'id'))
+                                        ->bulkToggleable()
+                                ])->columnSpan(2),
+                                Forms\Components\Section::make([
+                                    Forms\Components\CheckboxList::make('permissions')->label('Pegawai')
+                                        ->options(Resource::where('name', 'Employee')->first()->permissions->pluck('display', 'id'))
+                                        ->bulkToggleable()
+                                ])->columnSpan(2),
                             ])
                         
                     ]),

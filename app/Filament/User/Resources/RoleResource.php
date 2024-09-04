@@ -60,6 +60,24 @@ class RoleResource extends Resource
                                             ->bulkToggleable()
                                             ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
                                     ])->columnSpan(2),
+                                    Forms\Components\Section::make([
+                                        Forms\Components\CheckboxList::make('permissions')->label('Jadwal')
+                                            ->options(ModelsResource::where('name', 'Schedule')->first()->permissions->pluck('display', 'id'))
+                                            ->bulkToggleable()
+                                            ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
+                                    ])->columnSpan(2),
+                                    Forms\Components\Section::make([
+                                        Forms\Components\CheckboxList::make('permissions')->label('Kursi')
+                                            ->options(ModelsResource::where('name', 'Seat')->first()->permissions->pluck('display', 'id'))
+                                            ->bulkToggleable()
+                                            ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
+                                    ])->columnSpan(2),
+                                    Forms\Components\Section::make([
+                                        Forms\Components\CheckboxList::make('permissions')->label('Pegawai')
+                                            ->options(ModelsResource::where('name', 'Employee')->first()->permissions->pluck('display', 'id'))
+                                            ->bulkToggleable()
+                                            ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
+                                    ])->columnSpan(2),
                                 ])
                             
                         ]),

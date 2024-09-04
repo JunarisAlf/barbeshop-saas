@@ -67,6 +67,10 @@ class Setting extends Page implements HasForms, HasInfolists
                                             ->schema([
                                                 Infolists\Components\Actions::make([
                                                     Infolists\Components\Actions\Action::make('edit_schedule')
+                                                        ->visible(function (Infolists\Components\Actions\Action $action) {
+                                                            $schedule = $action->getComponent()->getRecord();
+                                                            return Auth::user()->can('update', $schedule);
+                                                        })
                                                         ->iconButton()
                                                         ->icon('heroicon-s-pencil-square')
                                                         ->form([
@@ -97,6 +101,10 @@ class Setting extends Page implements HasForms, HasInfolists
                                                             }
                                                         }),
                                                     Infolists\Components\Actions\Action::make('delete_schedule')
+                                                        ->visible(function (Infolists\Components\Actions\Action $action) {
+                                                            $schedule = $action->getComponent()->getRecord();
+                                                            return Auth::user()->can('delete', $schedule);
+                                                        })
                                                         ->iconButton()
                                                         ->color('danger')
                                                         ->icon('heroicon-s-trash')
@@ -151,7 +159,9 @@ class Setting extends Page implements HasForms, HasInfolists
                                     ->extraAttributes([
                                         'class' => 'dark:bg-white/5'
                                     ])
+                                    ->visible(fn() => Auth::user()->can('create', Schedule::class))
                             ])
+                            ->visible(fn() => Auth::user()->can('viewAny', Schedule::class))
                             ->columnSpan(3),
                         // Seat
                         Infolists\Components\Grid::make()

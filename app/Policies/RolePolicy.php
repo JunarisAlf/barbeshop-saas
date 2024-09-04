@@ -30,7 +30,7 @@ class RolePolicy
      */
     public function view(User $user, Role $role): bool
     {
-        if (in_array('viewAnyRole', $user->getArrayOfPermissions())) {
+        if (in_array('viewRole', $user->getArrayOfPermissions())) {
             return true;
         }
         return false;
@@ -41,7 +41,7 @@ class RolePolicy
      */
     public function create(User $user): bool
     {
-        if (in_array('viewAnyRole', $user->getArrayOfPermissions())) {
+        if (in_array('createRole', $user->getArrayOfPermissions())) {
             return true;
         }
         return false;
@@ -52,7 +52,7 @@ class RolePolicy
      */
     public function update(User $user, Role $role): bool
     {
-        if (in_array('viewAnyRole', $user->getArrayOfPermissions())) {
+        if (in_array('updateRole', $user->getArrayOfPermissions())) {
             return true;
         }
         return false;
@@ -63,7 +63,7 @@ class RolePolicy
      */
     public function delete(User $user, Role $role): bool
     {
-        if (in_array('viewAnyRole', $user->getArrayOfPermissions())) {
+        if (in_array('deleteRole', $user->getArrayOfPermissions())) {
             return true;
         }
         return false;
@@ -74,7 +74,7 @@ class RolePolicy
      */
     public function restore(User $user, Role $role): bool
     {
-        if (in_array('viewAnyRole', $user->getArrayOfPermissions())) {
+        if (in_array('restoreRole', $user->getArrayOfPermissions())) {
             return true;
         }
         return false;
@@ -85,7 +85,7 @@ class RolePolicy
      */
     public function forceDelete(User $user, Role $role): bool
     {
-        if (in_array('viewAnyRole', $user->getArrayOfPermissions())) {
+        if (in_array('forceDeleteRole', $user->getArrayOfPermissions())) {
             return true;
         }
         return false;
