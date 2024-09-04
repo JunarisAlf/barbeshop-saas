@@ -288,6 +288,10 @@ class Setting extends Page implements HasForms, HasInfolists
                                             ->schema([
                                                 Infolists\Components\Actions::make([
                                                     Infolists\Components\Actions\Action::make('edit_employee')
+                                                        ->visible(function (Infolists\Components\Actions\Action $action) {
+                                                            $employee = $action->getComponent()->getRecord();
+                                                            return Auth::user()->can('update', $employee);
+                                                        })
                                                         ->iconButton()
                                                         ->icon('heroicon-s-pencil-square')
                                                         ->form([
@@ -316,6 +320,10 @@ class Setting extends Page implements HasForms, HasInfolists
                                                             }
                                                         }),
                                                     Infolists\Components\Actions\Action::make('delete_employee')
+                                                        ->visible(function (Infolists\Components\Actions\Action $action) {
+                                                            $employee = $action->getComponent()->getRecord();
+                                                            return Auth::user()->can('delete', $employee);
+                                                        })
                                                         ->iconButton()
                                                         ->color('danger')
                                                         ->icon('heroicon-s-trash')
@@ -369,7 +377,9 @@ class Setting extends Page implements HasForms, HasInfolists
                                     ->extraAttributes([
                                         'class' => 'dark:bg-white/5'
                                     ])
+                                    ->visible(fn() => Auth::user()->can('create', Employee::class))
                             ])
+                            ->visible(fn() => Auth::user()->can('viewAny', Employee::class))
                             ->columnSpan(3),
                     ])
             ]);
