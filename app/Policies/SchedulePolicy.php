@@ -60,7 +60,7 @@ class SchedulePolicy
      /**
       * Determine whether the user can delete the model.
       */
-     public function delete(User $user): bool
+     public function delete(User $user, Schedule $schedule): bool
      {
          if (in_array('deleteSchedule', $user->getArrayOfPermissions())) {
              return true;
@@ -71,7 +71,7 @@ class SchedulePolicy
      /**
       * Determine whether the user can restore the model.
       */
-     public function restore(User $user): bool
+     public function restore(User $user, Schedule $schedule): bool
      {
          if (in_array('restoreSchedule', $user->getArrayOfPermissions())) {
              return true;
@@ -82,7 +82,7 @@ class SchedulePolicy
      /**
       * Determine whether the user can permanently delete the model.
       */
-     public function forceDelete(User $user): bool
+     public function forceDelete(User $user, Schedule $schedule): bool
      {
          if (in_array('forceDeleteSchedule', $user->getArrayOfPermissions())) {
              return true;
