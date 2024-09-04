@@ -73,6 +73,10 @@ class Barbershop extends Model
     {
         return $this->hasMany(Seat::class);
     }
+    public function employees(): HasMany
+    {
+        return $this->hasMany(Employee::class);
+    }
     protected function coordinate(): Attribute
     {
         return Attribute::make(
