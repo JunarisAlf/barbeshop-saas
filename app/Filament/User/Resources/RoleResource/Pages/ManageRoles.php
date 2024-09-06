@@ -55,6 +55,11 @@ class ManageRoles extends ManageRecords
                                         ->options(Resource::where('name', 'Employee')->first()->permissions->pluck('display', 'id'))
                                         ->bulkToggleable()
                                 ])->columnSpan(2),
+                                Forms\Components\Section::make([
+                                    Forms\Components\CheckboxList::make('permissions')->label('Pelanggan')
+                                        ->options(Resource::where('name', 'Member')->first()->permissions->pluck('display', 'id'))
+                                        ->bulkToggleable()
+                                ])->columnSpan(2),
                             ])
                         
                     ]),

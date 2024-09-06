@@ -78,6 +78,12 @@ class RoleResource extends Resource
                                             ->bulkToggleable()
                                             ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
                                     ])->columnSpan(2),
+                                    Forms\Components\Section::make([
+                                        Forms\Components\CheckboxList::make('permissions')->label('Pelanggan')
+                                            ->options(ModelsResource::where('name', 'Member')->first()->permissions->pluck('display', 'id'))
+                                            ->bulkToggleable()
+                                            ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
+                                    ])->columnSpan(2),
                                 ])
                             
                         ]),

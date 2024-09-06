@@ -84,5 +84,16 @@ class PermissionSeeder extends Seeder
             new Permission(['name' => 'forceDeleteEmployee', 'display' => 'Menghapus Permanen Data Pegawai']),
         ]);
 
+        $memberResource = Resource::create(['name' => 'Member', 'display' => 'Pelanggan']);
+        $memberResource->permissions()->saveMany([
+            new Permission(['name' => 'viewAnyMember', 'display' => 'Lihat List Pelanggan']),
+            new Permission(['name' => 'viewMember', 'display' => 'Lihat Detail Pelanggan']),
+            new Permission(['name' => 'createMember', 'display' => 'Menambahkan Pelanggan Baru']),
+            new Permission(['name' => 'updateMember', 'display' => 'Mengubah Data Pelanggan']),
+            new Permission(['name' => 'deleteMember', 'display' => 'Menghapus Data Pelanggan']),
+            new Permission(['name' => 'restoreMember', 'display' => 'Mengembalikan Data Pelanggan Terhapus']),
+            new Permission(['name' => 'forceDeleteMember', 'display' => 'Menghapus Permanen Data Pelanggan']),
+        ]);
+
     }
 }
