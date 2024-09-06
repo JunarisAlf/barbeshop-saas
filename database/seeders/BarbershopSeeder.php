@@ -47,6 +47,13 @@ class BarbershopSeeder extends Seeder
             ['name' => 'A2', 'type' => SeatTypeEnum::ADULT],
             ['name' => 'B1', 'type' => SeatTypeEnum::KID],
         ]);
+        $barbershop->members()->create([
+            'fullname'  => 'Member 1',
+            'gender'    => 'MALE',
+            'wa_number' => '6282290890767',
+            'email'     => 'member@gmail.com',
+            'address'   => 'JL. Durian No. 81, Pekanbaru',
+        ]);
         // $paymentDispatchers = Payment::getEventDispatcher();
         // Payment::unsetEventDispatcher();
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\EmployeeTypeEnum;
+use App\Enums\GenderEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('barbershop_id')->constrained('barbershops')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('fullname');
-            $table->enum('gender', ['MALE', 'FEMALE']);
+            $table->enum('gender',GenderEnum::names());
             $table->enum('type', EmployeeTypeEnum::names());
             $table->timestamps();
         });

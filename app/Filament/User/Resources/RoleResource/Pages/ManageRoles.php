@@ -4,13 +4,13 @@ namespace App\Filament\User\Resources\RoleResource\Pages;
 
 use App\Filament\User\Resources\RoleResource;
 use App\Models\Resource;
-use Auth;
-use DB;
 use Exception;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ManageRecords;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ManageRoles extends ManageRecords
 {
