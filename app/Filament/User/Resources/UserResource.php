@@ -29,7 +29,8 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label('Nama')->searchable(),
                 Tables\Columns\TextColumn::make('email')->searchable(),
-                Tables\Columns\TextColumn::make('wa_number')->label('Nomor WA')->searchable(),
+                Tables\Columns\TextColumn::make('employee.type')->label('posisi'),
+                Tables\Columns\TextColumn::make('roles.name')->label('Hak Akses')->badge(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make()->native(false),
@@ -45,14 +46,6 @@ class UserResource extends Resource
                                 ->required()
                                 ->email()
                                 ->unique(ignoreRecord: true),
-                            Forms\Components\TextInput::make('wa_number')
-                                ->label('WA')
-                                ->required()
-                                ->prefix('+628')
-                                ->afterStateHydrated(function (Forms\Components\TextInput $component, string $state) {
-                                    $component->state(substr($state, 3));
-                                })
-                                ->dehydrateStateUsing(fn (string $state): string => "628" . $state),
                             Forms\Components\Select::make('roles')
                                 ->label('Role')
                                 ->native(false)

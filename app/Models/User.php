@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -70,7 +71,10 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->belongsTo(Barbershop::class);
     }
-
+    public function employee(): BelongsTo
+    {
+        return $this->BelongsTo(Employee::class);
+    }
     public function roles(): BelongsToMany
     {
         return $this->BelongsToMany(Role::class);
@@ -88,7 +92,6 @@ class User extends Authenticatable implements FilamentUser
     protected $fillable = [
         'name',
         'email',
-        'wa_number',
         'password',
     ];
 

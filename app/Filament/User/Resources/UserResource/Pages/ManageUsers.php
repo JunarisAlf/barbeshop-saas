@@ -4,6 +4,7 @@ namespace App\Filament\User\Resources\UserResource\Pages;
 
 use App\Filament\User\Resources\UserResource;
 use App\Models\Barbershop;
+use App\Models\Employee;
 use App\Models\Role;
 use Filament\Actions;
 use Filament\Forms;
@@ -24,12 +25,6 @@ class ManageUsers extends ManageRecords
                         ->default(null)
                         ->email()
                         ->unique(),
-                    Forms\Components\TextInput::make('wa_number')
-                        ->label('WA')
-                        ->default('1234567890')
-                        ->required()
-                        ->prefix('+628')
-                        ->dehydrateStateUsing(fn (string $state): string => "628" . $state),
                     Forms\Components\TextInput::make('password')
                         ->label('Password')
                         ->required()
@@ -45,7 +40,11 @@ class ManageUsers extends ManageRecords
                         ->label('Role')
                         ->native(false)
                         ->multiple()
-                        ->options(Role::pluck('name', 'id'))
+                        ->options(Role::pluck('name', 'id')),
+                    Forms\Components\Select::make('employee_id')
+                        ->label('Pegawai')
+                        ->native(false)
+                        ->options(Employee::doesntHave('user')->pluck('fullname', 'id'))
                 ])
                 ->using(function (array $data, string $model) {
                     $roles = $data['roles'];

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\BarbershopStatusEnum;
 use App\Enums\DaysEnum;
+use App\Enums\EmployeeTypeEnum;
 use App\Enums\SeatTypeEnum;
 use App\Models\Barbershop;
 use App\Models\Payment;
@@ -26,26 +27,35 @@ class BarbershopSeeder extends Seeder
             'gmaps_url'     => 'https://maps.app.goo.gl/TQXLewgiL3Gd5yP68',
             'status'        => BarbershopStatusEnum::ACTIVE->name
         ]);
+
+        $employee = $barbershop->employees()->create([
+            'fullname'          => 'Fulan bin Fulan',
+            'wa_number'         => fake()->numerify('628##########'),
+            'address'           => fake()->address(),
+            'gender'            => 'MALE',
+            'type'              => EmployeeTypeEnum::OWNER->name,
+        ]);
+
         $user = $barbershop->users()->create([
             'id'                => 1,
-            'name'              => 'Fulan bin Fulan',
+            'name'              => 'Fulan',
             'email'             => 'fulan@gmail.com',
-            'wa_number'         => fake()->numerify('628##########'),
             'password'          => 'password',
-            'is_owner'          => true
+            'is_owner'          => true,
+            'employee_id'       => $employee->id
         ]);
 
         $user->roles()->attach($barbershop->roles()->where('name', 'Owner')->first()->id);
 
         $barbershop->schedules()->createMany([
-            ['day' => DaysEnum::MONDAY, 'open' => '09:00', 'close' => '12:00'],
-            ['day' => DaysEnum::MONDAY, 'open' => '13:00', 'close' => '20:00'],
-            ['day' => DaysEnum::TUESDAY, 'open' => '09:00', 'close' => '20:00'],
+            ['day' => DaysEnum::MONDAY->name, 'open' => '09:00', 'close' => '12:00'],
+            ['day' => DaysEnum::MONDAY->name, 'open' => '13:00', 'close' => '20:00'],
+            ['day' => DaysEnum::TUESDAY->name, 'open' => '09:00', 'close' => '20:00'],
         ]);
         $barbershop->seats()->createMany([
-            ['name' => 'A1', 'type' => SeatTypeEnum::ADULT],
-            ['name' => 'A2', 'type' => SeatTypeEnum::ADULT],
-            ['name' => 'B1', 'type' => SeatTypeEnum::KID],
+            ['name' => 'A1', 'type' => SeatTypeEnum::ADULT->name],
+            ['name' => 'A2', 'type' => SeatTypeEnum::ADULT->name],
+            ['name' => 'B1', 'type' => SeatTypeEnum::KID->name],
         ]);
         $barbershop->members()->create([
             'fullname'  => 'Member 1',
