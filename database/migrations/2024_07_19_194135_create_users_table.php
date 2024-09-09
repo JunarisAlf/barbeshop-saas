@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('wa_number')->unique();
             $table->string('password');
             $table->foreignId('barbershop_id')->references('id')->on('barbershops')->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean('is_owner')->default(false);
