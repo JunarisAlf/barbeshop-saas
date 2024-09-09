@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('barbershop_id')->constrained('barbershops')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('fullname');
-            $table->enum('gender',GenderEnum::names());
+            $table->string('wa_number')->nullable();
+            $table->string('address')->nullable();
+            $table->enum('gender', GenderEnum::names());
             $table->enum('type', EmployeeTypeEnum::names());
             $table->timestamps();
         });

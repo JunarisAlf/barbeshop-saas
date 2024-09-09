@@ -2,10 +2,11 @@
 
 namespace App\Filament\User\Resources;
 
+use App\Enums\EmployeeTypeEnum;
 use App\Enums\GenderEnum;
-use App\Filament\User\Resources\MemberResource\Pages;
-use App\Filament\User\Resources\MemberResource\RelationManagers;
-use App\Models\Member;
+use App\Filament\User\Resources\EmployeeResource\Pages;
+use App\Filament\User\Resources\EmployeeResource\RelationManagers;
+use App\Models\Employee;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,11 +15,11 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class MemberResource extends Resource
+class EmployeeResource extends Resource
 {
-    protected static ?string $model = Member::class;
+    protected static ?string $model = Employee::class;
 
-    protected static ?string $navigationIcon = 'heroicon-s-user-group';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function table(Table $table): Table
     {
@@ -26,13 +27,17 @@ class MemberResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('fullname')->label('Nama'),
                 Tables\Columns\TextColumn::make('wa_number')->label('Nomor WA'),
-                Tables\Columns\TextColumn::make('email')->label('Email'),
                 Tables\Columns\TextColumn::make('address')->label('Alamat'),
                 Tables\Columns\TextColumn::make('gender')
                     ->label('Gender')
                     ->badge()
-                    ->color(fn(Member $member): string => GenderEnum::getEnumFromName($member->gender)->getColor())
-                    ->state(fn(Member $member): string => GenderEnum::getValueFromName($member->gender)),
+                    ->color(fn(Employee $employee): string => GenderEnum::getEnumFromName($employee->gender)->getColor())
+                    ->state(fn(Employee $employee): string => GenderEnum::getValueFromName($employee->gender)),
+                Tables\Columns\TextColumn::make('type')
+                    ->label('Posisi')
+                    ->badge()
+                    ->color(fn(Employee $employee): string => EmployeeTypeEnum::getEnumFromName($employee->type)->getColor())
+                    ->state(fn(Employee $employee): string => EmployeeTypeEnum::getValueFromName($employee->type)),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
@@ -43,7 +48,7 @@ class MemberResource extends Resource
                             ->afterStateHydrated(function (Forms\Components\TextInput $component, string $state) {
                                 $component->state(substr($state, 3));
                             })
-                            ->dehydrateStateUsing(fn (string $state): string => "628" . $state),
+                            ->dehydrateStateUsing(fn(string $state): string => "628" . $state),
                         Forms\Components\TextInput::make('email')->email(),
                         Forms\Components\TextInput::make('address'),
                         Forms\Components\Select::make('gender')
@@ -56,13 +61,23 @@ class MemberResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageMembers::route('/'),
+            'index' => Pages\ManageEmployees::route('/'),
         ];
     }
 }

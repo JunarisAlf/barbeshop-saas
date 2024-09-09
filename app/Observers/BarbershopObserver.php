@@ -14,13 +14,14 @@ class BarbershopObserver
     public function created(Barbershop $barbershop): void
     {
         // TODO: create basic role
-        $resources = Resource::with('permissions')->whereIn('name', ['User', 'Payment', 'Role'])->get();
-        
+        $resources = Resource::with('permissions')->whereIn('name', ['User', 'Payment', 'Role', 'Schedule', 'Seat', 'Employee', 'Member'])->get();
         $ownerRole = Role::create(['name' => 'Owner', 'barbershop_id' => $barbershop->id]);
         $ownerRole->permissions()->attach($resources->where('name', 'User')->first()->permissions->pluck('id'));
         $ownerRole->permissions()->attach($resources->where('name', 'Role')->first()->permissions->pluck('id'));
-
-
+        $ownerRole->permissions()->attach($resources->where('name', 'Schedule')->first()->permissions->pluck('id'));
+        $ownerRole->permissions()->attach($resources->where('name', 'Seat')->first()->permissions->pluck('id'));
+        $ownerRole->permissions()->attach($resources->where('name', 'Employee')->first()->permissions->pluck('id'));
+        $ownerRole->permissions()->attach($resources->where('name', 'Member')->first()->permissions->pluck('id'));
     }
 
     /**
