@@ -45,11 +45,10 @@ class EmployeeResource extends Resource
                         Forms\Components\TextInput::make('fullname')->required()->label('Nama Lengkap'),
                         Forms\Components\TextInput::make('wa_number')
                             ->prefix('+628')
-                            ->afterStateHydrated(function (Forms\Components\TextInput $component, string $state) {
+                            ->afterStateHydrated(function (Forms\Components\TextInput $component, ?string $state) {
                                 $component->state(substr($state, 3));
                             })
-                            ->dehydrateStateUsing(fn(string $state): string => "628" . $state),
-                        Forms\Components\TextInput::make('email')->email(),
+                            ->dehydrateStateUsing(fn (string $state): string => "628" . $state),
                         Forms\Components\TextInput::make('address'),
                         Forms\Components\Select::make('gender')
                             ->options(GenderEnum::array())
@@ -61,11 +60,6 @@ class EmployeeResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
