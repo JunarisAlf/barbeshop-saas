@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class UserPolicy
 {
     public function before(){
-        if (Auth::guard()->name === 'superadmin') {
+        if (Auth::guard()->name === 'superadmin' || Auth::user()->has_full_access) {
             return true;
         }
     }

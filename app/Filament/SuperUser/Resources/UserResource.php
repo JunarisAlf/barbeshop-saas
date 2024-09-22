@@ -29,7 +29,7 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('email')->searchable(),
-                Tables\Columns\TextColumn::make('wa_number')->searchable(),
+                Tables\Columns\TextColumn::make('employee.wa_number')->searchable()->label('Nomor WA'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make()->native(false),

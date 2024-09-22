@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Enums\EmployeeTypeEnum;
 use App\Models\Barbershop;
 use App\Models\Resource;
 use App\Models\Role;
@@ -22,6 +23,23 @@ class BarbershopObserver
         $ownerRole->permissions()->attach($resources->where('name', 'Seat')->first()->permissions->pluck('id'));
         $ownerRole->permissions()->attach($resources->where('name', 'Employee')->first()->permissions->pluck('id'));
         $ownerRole->permissions()->attach($resources->where('name', 'Member')->first()->permissions->pluck('id'));
+
+
+        $employee = $barbershop->employees()->create([
+            'fullname'          => $barbershop->name . ' SuperUser',
+            'gender'            => 'MALE',
+            'type'              => EmployeeTypeEnum::OWNER->name,
+        ]);
+
+        $user = $barbershop->users()->create([
+            'name'              => $barbershop->name . ' SuperUser',
+            'email'             => $barbershop->name . '@example.com',
+            'password'          => $barbershop->name,
+            'is_owner'          => true,
+            'has_full_access'   => true,
+            'employee_id'       => $employee->id
+        ]);
+
     }
 
     /**
