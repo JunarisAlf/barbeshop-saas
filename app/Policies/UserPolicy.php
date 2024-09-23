@@ -10,10 +10,14 @@ use Illuminate\Support\Facades\Auth;
 
 class UserPolicy
 {
-    public function before(){
-        if (Auth::guard()->name === 'superadmin' || Auth::user()->has_full_access) {
+    public function before(): bool
+    {
+        if (Auth::guard()->name === 'superadmin') {
+            return true;
+        }else if(Auth::user()->has_full_access){
             return true;
         }
+        return false;
     }
     /**
      * Determine whether the user can view any models.

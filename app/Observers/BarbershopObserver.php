@@ -33,8 +33,8 @@ class BarbershopObserver
 
         $user = $barbershop->users()->create([
             'name'              => $barbershop->name . ' SuperUser',
-            'email'             => $barbershop->name . '@example.com',
-            'password'          => $barbershop->name,
+            'email'             => strtolower(str_replace(' ', '', $barbershop->name)) . '@example.com',
+            'password'          => strtolower(str_replace(' ', '', $barbershop->name)) . '@example.com',
             'is_owner'          => true,
             'has_full_access'   => true,
             'employee_id'       => $employee->id
