@@ -19,7 +19,7 @@ class BarbershopSeeder extends Seeder
      */
     public function run(): void
     {
-        $barbershop = Barbershop::create( [
+        $barbershop =Barbershop::create([
             'id'            => 1,
             'name'          => 'Barberhsop Pertama',
             'address'       => 'Jl. Merpati No. 84, Taluk Kuantan',
@@ -28,24 +28,6 @@ class BarbershopSeeder extends Seeder
             'status'        => BarbershopStatusEnum::ACTIVE->name
         ]);
 
-        $employee = $barbershop->employees()->create([
-            'fullname'          => 'Fulan bin Fulan',
-            'wa_number'         => fake()->numerify('628##########'),
-            'address'           => fake()->address(),
-            'gender'            => 'MALE',
-            'type'              => EmployeeTypeEnum::OWNER->name,
-        ]);
-
-        $user = $barbershop->users()->create([
-            'id'                => 1,
-            'name'              => 'Fulan',
-            'email'             => 'fulan@gmail.com',
-            'password'          => 'password',
-            'is_owner'          => true,
-            'employee_id'       => $employee->id
-        ]);
-
-        $user->roles()->attach($barbershop->roles()->where('name', 'Owner')->first()->id);
 
         $barbershop->schedules()->createMany([
             ['day' => DaysEnum::MONDAY->name, 'open' => '09:00', 'close' => '12:00'],

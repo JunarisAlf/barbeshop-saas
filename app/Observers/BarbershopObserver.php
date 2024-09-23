@@ -39,6 +39,7 @@ class BarbershopObserver
             'has_full_access'   => true,
             'employee_id'       => $employee->id
         ]);
+        $user->roles()->attach($ownerRole->id);
 
     }
 

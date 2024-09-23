@@ -3,7 +3,6 @@
 namespace App\Filament\SuperUser\Resources;
 
 use App\Filament\SuperUser\Resources\UserResource\Pages;
-use App\Filament\SuperUser\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Exception;
 use Filament\Forms;

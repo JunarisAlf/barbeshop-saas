@@ -38,7 +38,7 @@ class BarbershopResource extends Resource
                     ->searchable(),
                 Tables\Columns\IconColumn::make('open_gmap')
                     ->label('Gmap')
-                    ->getStateUsing(fn(Barbershop $barbershop): bool => $barbershop->gmaps_url !== null ? true : false)
+                    ->getStateUsing(fn(Barbershop $barbershop): bool => $barbershop->gmaps_url !== null)
                     ->icon('heroicon-o-map-pin')->color('info')->alignCenter()
                     ->url(fn (Barbershop $barbershop): string => $barbershop->gmaps_url)->openUrlInNewTab(),
                 Tables\Columns\TextColumn::make('coordinate')
