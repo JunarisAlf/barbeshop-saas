@@ -35,9 +35,9 @@ class BarbershopSeeder extends Seeder
             ['day' => DaysEnum::TUESDAY->name, 'open' => '09:00', 'close' => '20:00'],
         ]);
         $barbershop->seats()->createMany([
-            ['name' => 'A1', 'type' => SeatTypeEnum::ADULT->name],
-            ['name' => 'A2', 'type' => SeatTypeEnum::ADULT->name],
-            ['name' => 'B1', 'type' => SeatTypeEnum::KID->name],
+            ['name' => 'A1', 'type' => SeatTypeEnum::ADULT->name, 'est_duration' => 40],
+            ['name' => 'A2', 'type' => SeatTypeEnum::ADULT->name, 'est_duration' => 40],
+            ['name' => 'B1', 'type' => SeatTypeEnum::KID->name, 'est_duration' => 25],
         ]);
         $barbershop->members()->create([
             'fullname'  => 'Member 1',

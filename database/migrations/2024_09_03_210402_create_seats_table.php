@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('barbershop_id')->constrained('barbershops')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
+            $table->integer('est_duration');
             $table->enum('type', SeatTypeEnum::names());
             $table->timestamps();
         });

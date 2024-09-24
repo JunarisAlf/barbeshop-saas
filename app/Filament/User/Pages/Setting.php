@@ -172,6 +172,9 @@ class Setting extends Page implements HasForms, HasInfolists
                                         Infolists\Components\TextEntry::make('type')
                                             ->state(fn(Seat $seat) => SeatTypeEnum::getValueFromName($seat->type))
                                             ->hiddenLabel(fn() => true),
+                                        Infolists\Components\TextEntry::make('est_duration')
+                                            ->state(fn(Seat $seat) => $seat->est_duration . " Menit")
+                                            ->hiddenLabel(fn() => true),
                                         Infolists\Components\Grid::make()
                                             ->columnSpan(1)
                                             ->schema([
@@ -190,13 +193,15 @@ class Setting extends Page implements HasForms, HasInfolists
                                                                 ->required()
                                                                 ->label('Jenis'),
                                                             Forms\Components\TextInput::make('name')->required()->label('Nama'),
+                                                            Forms\Components\TextInput::make('est_duration')->numeric()->required()->label('Estimasi Waktu Pengerjaan (Menit)'),
                                                         ])
                                                         ->label('Edit Kursi')
                                                         ->fillForm(function (Infolists\Components\Actions\Action $action) {
                                                             $seat = $action->getComponent()->getRecord();
                                                             return [
-                                                                'name'  => $seat->name,
-                                                                'type'  => $seat->type,
+                                                                'name'          => $seat->name,
+                                                                'est_duration'  => $seat->est_duration,
+                                                                'type'          => $seat->type,
                                                             ];
                                                         })
                                                         ->action(function (Infolists\Components\Actions\Action $action, array $data) {
@@ -224,14 +229,14 @@ class Setting extends Page implements HasForms, HasInfolists
                                                             } else {
                                                                 Notification::make()->title('Delete failed')->danger()->send();
                                                             }
-                                                        })
+                                                        }),
                                                 ])
                                                     ->columnSpanFull()
                                                     ->alignEnd()
                                             ])
                                     ])
-                                    ->columns(['default' => 3])
-                                    ->columnSpan(3),
+                                    ->columns(['default' => 4])
+                                    ->columnSpanFull(),
                                 Infolists\Components\Section::make()
                                     ->schema([
                                         Infolists\Components\Actions::make([
@@ -247,6 +252,7 @@ class Setting extends Page implements HasForms, HasInfolists
                                                         ->required()
                                                         ->label('Jenis'),
                                                     Forms\Components\TextInput::make('name')->required()->label('Nama'),
+                                                    Forms\Components\TextInput::make('est_duration')->numeric()->required()->label('Estimasi Waktu Pengerjaan (Menit)'),
                                                 ])
                                                 ->label('Tambah Kursi')
                                                 ->action(function (array $data) {
@@ -262,14 +268,14 @@ class Setting extends Page implements HasForms, HasInfolists
                                             ->columnSpanFull()
                                             ->alignCenter()
                                     ])
-                                    ->columnSpan(3)
+                                    ->columnSpanFull()
                                     ->extraAttributes([
                                         'class' => 'dark:bg-white/5'
                                     ])
                                     ->visible(fn() => Auth::user()->can('create', Seat::class))
                             ])
                             ->visible(fn() => Auth::user()->can('viewAny', Seat::class))
-                            ->columnSpan(3),
+                            ->columnSpan(4),
                     ])
             ]);
     }
