@@ -29,7 +29,7 @@ class PermissionSeeder extends Seeder
             new Permission(['name' => 'changePassword', 'display' => 'Mengubah Password Semua User']),
         ]);
 
-        $paymentResource = Resource::create(['name' => 'Payment', 'display' => 'Pwmbayaran']);
+        $paymentResource = Resource::create(['name' => 'Payment', 'display' => 'Pembayaran']);
         $paymentResource->permissions()->saveMany([
             new Permission(['name' => 'viewAnyPayment', 'display' => 'Lihat List Pembayaran']),
             new Permission(['name' => 'viewPayment', 'display' => 'Lihat Detail Pembayaran']),
@@ -95,5 +95,26 @@ class PermissionSeeder extends Seeder
             new Permission(['name' => 'forceDeleteMember', 'display' => 'Menghapus Permanen Data Pelanggan']),
         ]);
 
+        $orderResource = Resource::create(['name' => 'Order', 'display' => 'Order']);
+        $orderResource->permissions()->saveMany([
+            new Permission(['name' => 'viewAnyOrder', 'display' => 'Lihat List Order']),
+            new Permission(['name' => 'viewOrder', 'display' => 'Lihat Detail Order']),
+            new Permission(['name' => 'createOrder', 'display' => 'Menambahkan Order Baru']),
+            new Permission(['name' => 'updateOrder', 'display' => 'Mengubah Data Order']),
+            new Permission(['name' => 'deleteOrder', 'display' => 'Menghapus Data Order']),
+            new Permission(['name' => 'restoreOrder', 'display' => 'Mengembalikan Data Order Terhapus']),
+            new Permission(['name' => 'forceDeleteOrder', 'display' => 'Menghapus Permanen Data Order']),
+        ]);
+
+        $serviceResource = Resource::create(['name' => 'Service', 'display' => 'Layanan']);
+        $serviceResource->permissions()->saveMany([
+            new Permission(['name' => 'viewAnyService', 'display' => 'Lihat List Layanan']),
+            new Permission(['name' => 'viewService', 'display' => 'Lihat Detail Layanan']),
+            new Permission(['name' => 'createService', 'display' => 'Menambahkan Layanan Baru']),
+            new Permission(['name' => 'updateService', 'display' => 'Mengubah Data Layanan']),
+            new Permission(['name' => 'deleteService', 'display' => 'Menghapus Data Layanan']),
+            new Permission(['name' => 'restoreService', 'display' => 'Mengembalikan Data Layanan Terhapus']),
+            new Permission(['name' => 'forceDeleteService', 'display' => 'Menghapus Permanen Data Layanan']),
+        ]);
     }
 }
