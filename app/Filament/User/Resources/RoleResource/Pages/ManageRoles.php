@@ -16,8 +16,22 @@ class ManageRoles extends ManageRecords
 {
     protected static string $resource = RoleResource::class;
     public $resources;
+
+  
     protected function getHeaderActions(): array
     {
+        $checkBoxEntries = [];
+        $resources = Resource::with('permissions')->whereNotIn('name', ['Payment'])->get();
+        foreach ($resources as $resource) {
+            array_push($checkBoxEntries, 
+                Forms\Components\Section::make([
+                    Forms\Components\CheckboxList::make('permissions')
+                        ->label($resource->display)
+                        ->options($resource->permissions->pluck('display', 'id'))
+                        ->bulkToggleable()
+                ])->columnSpan(2)
+            );
+        }
         return [
             Actions\CreateAction::make()
                 ->form([
@@ -28,50 +42,18 @@ class ManageRoles extends ManageRecords
                                 'sm'    => 2,
                                 'lg'    => 4,
                             ])
-                            ->schema([
-                                Forms\Components\Section::make([
-                                    Forms\Components\CheckboxList::make('permissions')
-                                        ->label('Pengguna')
-                                        ->options(Resource::where('name', 'User')->first()->permissions->pluck('display', 'id'))
-                                        ->bulkToggleable()
-                                ])->columnSpan(2),
-                                Forms\Components\Section::make([
-                                    Forms\Components\CheckboxList::make('permissions')->label('Role')
-                                        ->options(Resource::where('name', 'Role')->first()->permissions->pluck('display', 'id'))
-                                        ->bulkToggleable()
-                                ])->columnSpan(2),
-                                Forms\Components\Section::make([
-                                    Forms\Components\CheckboxList::make('permissions')->label('Jadwal')
-                                        ->options(Resource::where('name', 'Schedule')->first()->permissions->pluck('display', 'id'))
-                                        ->bulkToggleable()
-                                ])->columnSpan(2),
-                                Forms\Components\Section::make([
-                                    Forms\Components\CheckboxList::make('permissions')->label('Kursi')
-                                        ->options(Resource::where('name', 'Seat')->first()->permissions->pluck('display', 'id'))
-                                        ->bulkToggleable()
-                                ])->columnSpan(2),
-                                Forms\Components\Section::make([
-                                    Forms\Components\CheckboxList::make('permissions')->label('Pegawai')
-                                        ->options(Resource::where('name', 'Employee')->first()->permissions->pluck('display', 'id'))
-                                        ->bulkToggleable()
-                                ])->columnSpan(2),
-                                Forms\Components\Section::make([
-                                    Forms\Components\CheckboxList::make('permissions')->label('Pelanggan')
-                                        ->options(Resource::where('name', 'Member')->first()->permissions->pluck('display', 'id'))
-                                        ->bulkToggleable()
-                                ])->columnSpan(2),
-                            ])
-                        
+                            ->schema($checkBoxEntries)
+
                     ]),
                 ])
-                ->using(function(array $data, string $model){
+                ->using(function (array $data, string $model) {
                     DB::beginTransaction();
-                    try{
+                    try {
                         $role = $model::create(['name' => $data['name'], 'barbershop_id' => Auth::user()->barbershop_id]);
                         $role->permissions()->attach($data['permissions']);
                         DB::commit();
                         Notification::make()->title('Role berhasil dibuat!')->success()->send();
-                    }catch(Exception $e){
+                    } catch (Exception $e) {
                         DB::rollBack();
                         Notification::make()->title('Role Gagal dibuat: ' . $e->getMessage())->danger()->send();
                     }

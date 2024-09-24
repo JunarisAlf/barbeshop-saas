@@ -22,9 +22,22 @@ class RoleResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
 
-
     public static function table(Table $table): Table
     {   
+        $checkBoxEntries = [];
+        $resources = ModelsResource::with('permissions')->whereNotIn('name', ['Payment'])->get();
+        foreach ($resources as $resource) {
+            array_push($checkBoxEntries, 
+                Forms\Components\Section::make([
+                    Forms\Components\CheckboxList::make('permissions')
+                        ->label($resource->display)
+                        ->options($resource->permissions->pluck('display', 'id'))
+                        ->bulkToggleable()
+                        ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
+                ])->columnSpan(2)
+            );
+        }
+
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label('Role'),
@@ -47,45 +60,7 @@ class RoleResource extends Resource
                                     'sm'    => 2,
                                     'lg'    => 4,
                                 ])
-                                ->schema([
-                                    Forms\Components\Section::make([
-                                        Forms\Components\CheckboxList::make('permissions')->label('Pengguna')
-                                            ->options(ModelsResource::where('name', 'User')->first()->permissions->pluck('display', 'id'))
-                                            ->bulkToggleable()
-                                            ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
-                                    ])->columnSpan(2),
-                                    Forms\Components\Section::make([
-                                        Forms\Components\CheckboxList::make('permissions')->label('Role')
-                                            ->options(ModelsResource::where('name', 'Role')->first()->permissions->pluck('display', 'id'))
-                                            ->bulkToggleable()
-                                            ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
-                                    ])->columnSpan(2),
-                                    Forms\Components\Section::make([
-                                        Forms\Components\CheckboxList::make('permissions')->label('Jadwal')
-                                            ->options(ModelsResource::where('name', 'Schedule')->first()->permissions->pluck('display', 'id'))
-                                            ->bulkToggleable()
-                                            ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
-                                    ])->columnSpan(2),
-                                    Forms\Components\Section::make([
-                                        Forms\Components\CheckboxList::make('permissions')->label('Kursi')
-                                            ->options(ModelsResource::where('name', 'Seat')->first()->permissions->pluck('display', 'id'))
-                                            ->bulkToggleable()
-                                            ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
-                                    ])->columnSpan(2),
-                                    Forms\Components\Section::make([
-                                        Forms\Components\CheckboxList::make('permissions')->label('Pegawai')
-                                            ->options(ModelsResource::where('name', 'Employee')->first()->permissions->pluck('display', 'id'))
-                                            ->bulkToggleable()
-                                            ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
-                                    ])->columnSpan(2),
-                                    Forms\Components\Section::make([
-                                        Forms\Components\CheckboxList::make('permissions')->label('Pelanggan')
-                                            ->options(ModelsResource::where('name', 'Member')->first()->permissions->pluck('display', 'id'))
-                                            ->bulkToggleable()
-                                            ->formatStateUsing(fn (Role $role) => $role->permissions()->pluck('permission_id'))
-                                    ])->columnSpan(2),
-                                ])
-                            
+                                ->schema($checkBoxEntries)
                         ]),
                     ])
                     ->using(function(Role $role, array $data){
