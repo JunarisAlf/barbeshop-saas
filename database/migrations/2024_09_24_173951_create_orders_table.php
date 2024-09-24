@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('barbershop_id')->constrained('barbershops')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('member_id')->nullable()->constrained('members')->nullOnDelete()->cascadeOnUpdate();
-            $table->foreignId('seat_id')->constrained('seats')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId('seat_id')->nullable()->constrained('seats')->nullOnDelete()->cascadeOnUpdate();
 
             $table->time('est_start');
             $table->time('est_finish');
